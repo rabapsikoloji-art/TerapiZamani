@@ -1,0 +1,102 @@
+Aşağıdaki görevi eksiksiz şekilde uygula. Mevcut uygulamaya daha önce verilen tüm maddeleri ekle ve aşağıdaki yeni gereksinimi de dahil et: Her kurum (organizasyon/klinik) kendi WhatsApp, Google Meet/Calendar, SMS ve AI API anahtarlarını bağlayabilsin; bu API’lerin girildiği, doğrulandığı ve yönetildiği bir ekran Settings içinde yer alsın. Her maddeyi ayrı iş birimi (ticket) olarak ele al, backend veri modellerini, gerekli endpointleri, UI/UX mockup öğelerini, validation ve kabul kriterlerini açıkça yaz. Gerekirse ek sorular sor.
+
+Genel hedef
+Çok-kurumlu (multi-tenant) kullanım: farklı kurumlar kendi entegrasyon kimlik bilgilerini (credentials) ekleyebilsin ve uygulama o kuruma ait entegrasyonları kullanarak eylemleri (WhatsApp bildirim, Google Calendar etkinliği, SMS gönderimi, AI analiz çağrısı vb.) gerçekleştirsin.
+Güvenlik-first: tüm kimlik bilgileri güvenli olarak saklanmalı (secret manager / encrypted db), frontend’e gizli anahtarlar gönderilmemeli.
+Admin/organizasyon rolü: sadece kurumdaki yetkili kullanıcılar (org admin) bu entegrasyonları ekleyip düzenleyebilsin; sistem yöneticisi (superadmin) global varsayılanlar atayabilsin.
+1) Yeni özellik: Kurumsal Entegrasyon Yönetimi (Per-organization Integrations)
+Özellikler (UI):
+Settings -> Integrations (veya Settings -> Organization Integrations) ekranı.
+Ekranda listelenen entegrasyon türleri: WhatsApp, Google (OAuth Client ID/Secret - Calendar/Meet), SMS (Twilio/Vonage/Nexmo vb.), AI (API Key), ve ilerde eklenebilecek diğer providerlar.
+Kurum bazında birden fazla provider eklenebilme (ör: iki farklı SMS sağlayıcısı) ve biri default olarak işaretlenebilme.
+Her provider için:
+Gerekli alanlar form alanı olarak (ör: provider_name, client_id, client_secret veya api_key, webhook_url vb.).
+Test connection butonu (bağlantıyı doğrulayan basit test isteği).
+Aktivasyon toggle: aktif/pasif.
+Yetkili (created_by) ve tarih bilgisi göster.
+Global admin (sistem yöneticisi) Settings içinde sistem-seviyesi varsayılan entegrasyonlar atayabilsin; org admin bunları override edebilsin.
+Backend veri modeli (örnek):
+Table: organization_integrations
+id (uuid)
+organization_id (uuid)
+integration_type (enum: 'whatsapp','google','sms','ai',...)
+provider (string) — örn. 'twilio', 'whatsapp_business', 'google', 'custom_ai'
+config (json) — provider spesifik ayarlar (encrypted)
+is_active (boolean)
+is_default (boolean)
+created_by (user_id)
+created_at, updated_at
+Not: config alanı veritabanında şifreli (at-rest encryption). Ayrıca secrets gerçek secret'lar secret manager (AWS Secrets Manager / GCP Secret Manager / Vault) veya database şifreleme ile saklanmalı; config içinde sadece referans/metadata tutulabilir.
+API endpoint örnekleri:
+GET /orgs/{org_id}/integrations
+POST /orgs/{org_id}/integrations
+PUT /orgs/{org_id}/integrations/{integration_id}
+POST /orgs/{org_id}/integrations/{integration_id}/test -> returns success/failure + diagnostic
+DELETE /orgs/{org_id}/integrations/{integration_id}
+UI validation & UX:
+Zorunlu alanlar provider'a göre dinamik (ör: Google için client_id + client_secret + redirect URI bilgisi, WhatsApp için phone_number_id/access_token veya Twilio SID + Auth Token).
+Test connection tuşu başarılıysa yeşil, değilse hata mesajı + öneriler (scopes eksik, token expired, callback URL mismatch).
+Kullanıcıya hangi entegrasyonun hangi fonksiyonda kullanılacağı seçilebilsin (ör: “WhatsApp bildirimleri için hangi provider kullanılsın?”). Varsayılan: org default; yoksa sistem genelindeki default; yoksa hata/log.
+2) Entegrasyonların çalışma mantığı (rules)
+İş akışı:
+Her zaman önce organizasyonun aktif entegrasyonunu kontrol et; varsa kullan; yoksa global default kullanılsın.
+Eğer provider kullanılamazsa (test başarısız/expired), fallback olarak alternatif aktif provider varsa onu dene; yoksa işlem loglanmalı ve kurumdaki yetkiliye uyarı gönderilmeli.
+Örnek: WhatsApp hatırlatma gönderimi:
+Kullanılacak provider = org.integration where type='whatsapp' and is_active=true and is_default=true
+Gönderim yapılırken provider-specific SDK/HTTP çağrısı yapılır; isteğin logu tutulur.
+3) Güvenlik, saklama ve izinler
+Secrets:
+client_secret, api_key, auth_token gibi gizli bilgiler sadece secret manager veya veritabanında güçlü şifreleme ile saklanmalı. Frontend’e asla tam secret gönderilmemeli; test connection server-side yapılmalı.
+Token yenileme/refresh mantığı: Google OAuth için refresh token saklanmalı, access token expiration yönetimi yapılmalı.
+RBAC:
+Sadece organizasyon admini/authorized role entegrasyon ekleyip düzenleyebilsin.
+Değişiklikler audit loglarına kaydedilsin (hangi user, hangi field, önceki değer referansı tutulmalı).
+Audit / logging:
+Entegrasyon ekleme/düzenleme/silme, test bağlantı sonucu, entegrasyon ile yapılan tüm gönderim istekleri loglansın (gönderim-id, status, timestamp, kuruma ait provider id).
+Loglarda gizli data (secrets) maskelensin.
+4) Test & Acceptance Criteria (Kabul Kriterleri)
+Org admin Settings -> Integrations ekranına gidip WhatsApp provider ekleyebilmeli ve Test connection başarılı olmalı.
+Aynı kuruma birden fazla SMS/WhatsApp provider eklenebilmeli; biri default yapılabilmeli.
+Entegrasyon eklendikten sonra:
+Takvimden oluşturulan randevu hatırlatmaları (WhatsApp/SMS) org’un seçili provider’ı kullanarak gönderilebilmeli (test/sandbox veya log ile doğrulanmalı).
+AI analiz isteği yapıldığında org’un bağlı AI API key’i kullanılarak çağrı yapılabilmeli.
+Google Calendar/Meet entegrasyonu org’un OAuth bilgileriyle etkinlik oluşturabilmeli; Meet linki event içine eklenebilmeli.
+Test connection butonu hem başarısız hem başarılı durumlarda detaylı hata/başarı mesajı döndürmeli.
+Entegrasyon bilgisi düzenlendiğinde değişiklik audit log’ta görünmeli.
+Eğer org’un entegrasyonu inaktifse veya test başarısızsa, sistem bunu UI’de açıkça göstermeli ve fallback davranışı çalışmalı.
+5) Teknik öneriler / sağlayıcı spesifik notlar
+WhatsApp:
+Desteklenen sağlayıcılar: Meta WhatsApp Business API, Twilio WhatsApp, or custom gateways.
+Gerekli alanlar örn: provider, phone_number_id, access_token veya account_sid + auth_token.
+Webhook doğrulama/önizleme: test gönderimi yapılırken başarısız olursa webhook ayarları kontrolü önerilsin.
+Google (Calendar/Meet):
+Gereken scope: https://www.googleapis.com/auth/calendar, https://www.googleapis.com/auth/calendar.events.
+Saklanacak: client_id, client_secret, redirect_uris, org-specific oauth refresh token.
+OAuth flow server-side yapılmalı; frontend sadece yönlendirme linkini başlatmalı.
+SMS:
+Destek: Twilio, Nexmo, Vonage — account_sid, auth_token, from_number gibi alanlar.
+AI:
+Kurum bazında api_key, endpoint saklansın.
+AI analiz çağrısı yapılırken hangi api key kullanıldığı loglanmalı (maskelenmiş).
+Testing/Sandbox:
+Entegrasyonların test/sandbox modunda çalışması için mode alanı (sandbox/production) ekle.
+Test connection, sandbox endpointlerine geçerek doğrulama yapabilmeli.
+6) UX metinleri / ekran yerleşimi (kısa)
+Settings -> Integrations (tab list)
+Kartlar: WhatsApp | Google Calendar & Meet | SMS | AI API
+Her kart içinde: Mevcut provider listesi + "Yeni provider ekle" butonu.
+Provider detail modal: provider seç, credentials gir, Test connection -> kaydet.
+Uyarı banner’ı: “Bu organizasyon için aktif bir WhatsApp sağlayıcısı bulunmuyor. Bildirimler gönderilemeyecek. [Entegrasyon ekle]”
+7) Migration & Ops
+Mevcut sistemde global API anahtarları varsa:
+Migration: global keys -> sistem default integration olarak taşınsın; organizasyonlar için referans kopyası oluşturulmasın (gizli alanlar copy edilmeyecek, admin manual giriş yapmalı veya migrate script güvenli şekilde çalıştırmalı).
+Dokümantasyon: entegrasyon ekleme adımları (Google OAuth redirect URI, WhatsApp token nasıl alınır vb.) dev dokümantasyona eklensin.
+Monitoring: Entegrasyon çağrıları için başarısızlık sayıları alarm oluşturulabilsin (örn: 5 başarısız WhatsApp gönderimi -> ops/ürün sahiplerine uyarı).
+8) Teslimat / Önceliklendirme önerisi (güncelleme)
+Settings -> Integrations UI + backend model + secure secret storage (kritik)
+Test connection implementasyonu (her provider için minimal doğrulama)
+Randevu/hatırlatma akışını org-specific provider ile bağlama (WhatsApp/SMS)
+Google OAuth flow (Calendar/Meet) — token refresh + event creation
+AI API org-specific anahtar ile analiz çağrısı
+Fallback mekanizması, audit log, RBAC kontrolleri
+Dokümantasyon, QA test senaryoları, migration planı

@@ -1,0 +1,155 @@
+mmpı: RABA ; SCL-90: SCL PUANLAMA document.getElementById("sclForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    // Soru yanıtlarını alın
+    const soru_yanitlari = {};
+    for (let i = 1; i <= 90; i++) {
+        soru_yanitlari[i] = parseInt(document.querySelector(`input[name="q${i}"]`).value) || 0;
+    }
+
+    // Alt başlık soru numaraları
+    const somatizasyon_sorular = [1, 4, 12, 27, 40, 42, 48, 49, 52, 53, 56, 58];
+    const obsesif_kompulsif_sorular = [3, 9, 10, 28, 38, 45, 46, 51, 55, 65];
+    const kisiler_arasi_duyarlilik_sorular = [6, 21, 34, 36, 37, 41, 61, 69, 73];
+    const depresyon_sorular = [5, 14, 15, 20, 22, 26, 29, 30, 31, 32, 54, 71, 79];
+    const anksiyete_sorular = [2, 17, 23, 33, 39, 57, 72, 78, 80, 86];
+    const ofke_dusmanlik_sorular = [11, 24, 63, 67, 74, 81];
+    const fobik_anksiyete_sorular = [13, 25, 47, 50, 70, 75, 82];
+    const paranoid_dusunceler_sorular = [8, 18, 43, 68, 76, 83];
+    const psikotizm_sorular = [7, 16, 35, 62, 77, 84, 85, 87, 88, 90];
+    const ek_skala_sorular = [19, 44, 59, 60, 64, 66, 89];
+
+    // Alt başlık puanlarını hesaplama fonksiyonu
+    function alt_baslik_puani_hesapla(sorular) {
+        let toplam_puan = 0;
+        sorular.forEach(soru => {
+            toplam_puan += soru_yanitlari[soru];
+        });
+        return toplam_puan / sorular.length;  // Ortalama puanı hesapla
+    }
+
+    // Alt başlık puanlarını hesapla
+    const somatizasyon_puani = alt_baslik_puani_hesapla(somatizasyon_sorular);
+    const obsesif_kompulsif_puani = alt_baslik_puani_hesapla(obsesif_kompulsif_sorular);
+    const kisiler_arasi_duyarlilik_puani = alt_baslik_puani_hesapla(kisiler_arasi_duyarlilik_sorular);
+    const depresyon_puani = alt_baslik_puani_hesapla(depresyon_sorular);
+    const anksiyete_puani = alt_baslik_puani_hesapla(anksiyete_sorular);
+    const ofke_dusmanlik_puani = alt_baslik_puani_hesapla(ofke_dusmanlik_sorular);
+    const fobik_anksiyete_puani = alt_baslik_puani_hesapla(fobik_anksiyete_sorular);
+    const paranoid_dusunceler_puani = alt_baslik_puani_hesapla(paranoid_dusunceler_sorular);
+    const psikotizm_puani = alt_baslik_puani_hesapla(psikotizm_sorular);
+    const ek_skala_puani = alt_baslik_puani_hesapla(ek_skala_sorular);
+
+    // Puanları bir diziye ekle
+    const puanlar = [
+        somatizasyon_puani,
+        obsesif_kompulsif_puani,
+        kisiler_arasi_duyarlilik_puani,
+        depresyon_puani,
+        anksiyete_puani,
+        ofke_dusmanlik_puani,
+        fobik_anksiyete_puani,
+        paranoid_dusunceler_puani,
+        psikotizm_puani,
+        ek_skala_puani
+    ];
+
+    // Kategorilere ayırma fonksiyonu
+    function kategoriBelirle(puan) {
+        if (puan < 1) {
+            return 'Normal';
+        } else if (puan < 2) {
+            return 'Hafif Düzeyde';
+        } else if (puan < 3) {
+            return 'Orta Düzeyde';
+        } else {
+            return 'Şiddetli Düzeyde';
+        }
+    }
+
+    // Alt başlık isimleri
+    const alt_basliklar = [
+        'Somatizasyon',
+        'Obsesif Kompulsif',
+        'Kişiler Arası Duyarlılık',
+        'Depresyon',
+        'Anksiyete',
+        'Öfke Düşmanlık',
+        'Fobik Anksiyete',
+        'Paranoid Düşünceler',
+        'Psikotizm',
+        'Ek Skala'
+    ];
+
+    // Sonuçları göster
+    const sonucElement = document.getElementById('sonuc');
+    sonucElement.innerHTML = `
+        <h2>Sonuçlar</h2>
+        ${puanlar.map((puan, index) => `
+            <h3>${alt_basliklar[index]}</h3>
+            <p>Puan: <strong>${puan.toFixed(2)}</strong> - <strong>${kategoriBelirle(puan)}</strong></p>
+        `).join('')}
+    `;
+
+    // Grafik oluştur
+    const ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: alt_basliklar,
+            datasets: [{
+                label: 'Puanlar',
+                data: puanlar,
+                backgroundColor: puanlar.map(puan => {
+                    if (puan < 1) return 'green';
+                    else if (puan < 2) return 'blue';
+                    else if (puan < 3) return 'yellow';
+                    else return 'red';
+                }),
+                borderColor: 'black',
+                borderWidth: 1
+            },
+            {
+                type: 'line',
+                label: 'Puan Çizgisi',
+                data: puanlar,
+                borderColor: 'black',
+                fill: false,
+                lineTension: 0.4,
+                pointBackgroundColor: 'black',
+                pointBorderColor: 'black',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 4
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `${alt_basliklar[tooltipItem.dataIndex]}: ${puanlar[tooltipItem.dataIndex].toFixed(2)} (${kategoriBelirle(puanlar[tooltipItem.dataIndex])})`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Lejantı güncelle
+    const legendElement = document.getElementById('legend');
+    legendElement.innerHTML = `
+        <p><span style="color:green;">●</span> 0-1: Normal</p>
+        <p><span style="color:blue;">●</span> 1-2: Hafif Düzeyde</p>
+        <p><span style="color:yellow;">●</span> 2-3: Orta Düzeyde</p>
+        <p><span style="color:red;">●</span> 3-4: Şiddetli Düzeyde</p>
+    `;
+});

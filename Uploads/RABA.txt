@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMPI Test Öncesi Formu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        /* Container styling */
+        .form-container, .test-container {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        /* Form wrapper */
+        .form-wrapper {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Form field styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.2);
+        }
+
+        /* Gender select styling */
+        select {
+            appearance: none;
+            background-color: #fff;
+        }
+
+        .form-group.gender-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Button styling */
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Question section */
+        .question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Sol tarafta sorunun metni olacak */
+label {
+    font-size: 16px;
+    color: #555;
+    flex: 1; /* Sola yaslayıp genişletmek için flex kullanıyoruz */
+    text-align: left;
+}
+
+/* Sağ tarafta radio butonları olacak */
+.radio-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+        .radio-group label {
+            margin-right: 10px; /* Adds spacing between radio options */
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        /* Charts */
+        canvas {
+    display: block;
+    margin: 40px auto;
+    max-width: 100%; /* Ekrana sığmasını sağlar */
+    height: auto; /* Oranı koruyarak yüksekliği ayarlamak */
+    width: 100%; /* Grafiklerin tam genişlikte görünmesini sağlar */
+    min-height: 400px; /* Minimum yükseklik ayarlayarak grafiği büyüt */
+}
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-wrapper {
+                padding: 20px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            /* Ensure radio buttons stack vertically on smaller screens */
+            .question {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .radio-group {
+                justify-content: flex-start;
+                margin-top: 8px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+  
+  
+
+<!-- İlk Sayfa: Bilgi Formu -->
+<div class="form-container visible" id="formPage">
+     <h1>Danışan Bilgi Formu</h1>
+    <form id="userInfoForm">
+        <div class="form-group">
+            <label for="firstName">İsim:</label>
+            <input type="text" id="firstName" name="ad" required> <!-- name="ad" -->
+        </div>
+        <div class="form-group">
+            <label for="lastName">Soyisim:</label>
+            <input type="text" id="lastName" name="soyad" required> <!-- name="soyad" -->
+        </div>
+        <div class="form-group">
+            <label for="age">Yaş:</label> <!-- Yaş bilgisi eklendi -->
+            <input type="number" id="age" name="yaş" required>
+        </div>
+       <div class="form-group">
+            <label for="date">Test Doldurma Tarihi:</label> <!-- Yaş bilgisi eklendi -->
+            <input type="date" id="date" name="tarih" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Telefon Numarası:</label>
+            <input type="tel" id="phone" name="telefon" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Adresi:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="genderSelect">Cinsiyet:</label>
+            <select id="genderSelect" name="cinsiyet"> <!-- name="cinsiyet" -->
+                <option value="male">Erkek</option>
+                <option value="female">Kadın</option>
+            </select>
+        </div>
+        <button type="button" onclick="goToTest()">Teste Geç!</button>
+      <button type="button" onclick="loadExcel()">Load Excel Data</button>
+    </form>
+  
+ </div> 
+  
+<div class="test-container" id="testPage">
+    <h1>MMPI Test - Tüm Ölçekler</h1>
+  Doğru için "1"; Yanlış İçin "2", Boş için "0" yazınız. Mümkün olduğunca sorulara cevap veriniz, 30 boş (0) cevaptan sonra testin sonuçlarının doğruluğunu anlamak mümkün olmamaktadır. Olabildiğince 1 veya 2 işareti koymaya çalışınız.
+  
+  
+    <form id="testForm">
+        <div id="questionsContainer"></div>
+        <button type="button" onclick="calculateAllScales()">Sonuçları Göster</button>
+        <button type="button" onclick="simulateAnswers()">Simüle Et!</button>
+        <input type="file" id="uploadExcel" accept=".xlsx, .xls">
+        <button type="button" onclick="loadExcel()">Load Excel Data</button>
+        <button type="button" onclick="goBackToForm()">Danışan Bilgi Formuna Geri Dön</button>
+         <button type="button" onclick="clearForm()">Sayfayı Temizle</button>
+  
+       <canvas id="erkekTpuanChart" width="200" height="100"></canvas>
+       <canvas id="kadinTpuanChart" width="200" height="100"></canvas>
+    </form>
+
+    <div id="result"></div>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Sadece bir Chart.js sürümü -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> <!-- Tek bir XLSX sürümü -->
+<script src="script.js"></script> <!-- Kendi script dosyanız -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
+
+
+
+ 
+</div>
+  
+  </body>
+  
+    <script>
+        const totalQuestions = 566;
+
+        // Soruları simüle etmek için örnek sorular
+        const questionsText = `
+        1	 Teknik yazılardan hoşlanırım
+2	 İştahım iyidir
+3	 Çok defa sabahları dinç ve dinlenmiş olarak uyanırım
+4	 Kütüphaneci olarak çalışmayı seveceğimi sanıyorum
+5	 Gürültüden kolayca uyanırım
+6	 Cinayet haberlerini okumaktan hoşlanırım
+7	 Çoğu zaman el ve ayaklarımın sıcaklığı iyidir
+8	 Günlük hayatım beni ilgilendirecek şeylerle doludur
+9	 Bugün de hemen hemen eskisi kadar iyi çalışabiliyorum
+10	 Çoğu zaman boğazım tıkanır gibi olur
+11	 İnsan rüyalarını anlamaya çalışmalı ve kendini onlara göre ayarlamalıdır
+12	 Polis romanlarından ya da esrarengiz yazılardan hoşlanırım
+13	 Büyük bir sinir gerginliği içinde çalışırım
+14	 Ayda iki defa ishal olurum
+15	 Ara sıra söylenemeyecek kadar ayıp şeyler düşünürüm
+16	 hayatta kötülükler hep beni bulur
+17	 Babam iyi bir adamdır
+18	 Pek seyrek kabız olurum
+19	 Yeni bir işe girince kimin gözüne girmek gerektiğini öğrenmek isterim
+20	 Cinsel yaşamımdan memnunum
+21	 Zaman zaman evi bırakıp gitmek istemişimdir
+22	 Ara sıra kontrol edemediğim gülme ve ağlama nöbetlerine tutulurum
+23	 Mide bulantısı ve kusmadan sıkıntı çekerim
+24	 Kimse beni anlamıyor
+25	 Şarkıcı olmayı isterim
+26	 Başım derde girince susmayı tercih ederim
+27	 Bazen kötü ruhların beni etkileri altına aldığını hissederim
+28	 Kötülüğe kötülükle karşılık vermek benim prensibimdir
+29	 haftada çok defa midem ekşir
+30	 Bazen canım küfretmek ister
+31	 Sık sık geceleri kabus geçiririm
+32	 Zihnimi bir iş üzerinde toplamada güçlük çekerim
+33	 Başımdan çok garip ve tuhaf şeyler geçti
+34	 Çoğu zaman öksürüğüm vardır
+35	 Başkaları engel olmasaydı daha çok başarılı olurdum
+36	 Sağlığım beni pek kaygılandırmaz
+37	 Cinsel yaşamım yüzünden başım hiç derde girmedi
+38	 Gençliğimde bir devre ufak tefek şeyler çaldım
+39	 Bazen içimden bir şeyler kırmak isteği geçer
+40	 Başka bir şey yapmaktansa çoğu zaman oturup hayal kurmayı severim
+41	 Kendimi toparlayamadığım için günler, haftalar hatta aylarca hiçbir şeye el sürmediğim oldu
+42	 Ailem seçtiğim (veya seçmek istediğim) mesleği beğenmiyor
+43	 Kuşkulu ve rahatsız uyurum
+44	 Çoğu zaman başımın her tarafı ağrır
+45	 her zaman doğruyu söylemem
+46	 Şimdi her zamankinden daha iyi düşünüp tartabiliyorum
+47	 Ortada hiç bir neden yokken haftada bir yada sık sık birden bire her yanımı ateş basar
+48	 Başkaları ile bir arada iken kulağıma çok garip şeyler gelmesinden rahatsız olurum
+49	 Kanunların hemen hepsi kaldırılsa daha iyi olur
+50	 Bazen ruhum vücudumdan ayrılır
+51	 Sağlığım bir çok arkadaşımınki kadar iyidir
+52	 Uzun zamandan beri görmediğim okul arkadaşlarım ya da tanıdıklarım,önce benimle konuşmazlarsa onları görmezden gelmeyi tercih ederim
+53	 hocaların dua okuyup üflemesi hastalığı iyileştirir
+54	 Tanıdıklarımın çoğu beni sever
+55	 Kalp ve göğüs ağrılarından hemen hemen hiç şikayetim yoktur
+56	 Çocukken okuldan kaçtığım için bir iki defa cezalandırıldım
+57	 İnsanlarla çabuk kaynaşırım
+58	 Kuran’ın buyurdukları bir bir çıkmaktadır
+59	 Çok defa benden az bilenlerle çalışmak zorunda kaldım
+60	 her gün gazetelerin baş yazılarını okumam
+61	 Gerektiği gibi bir hayat yaşayamadım
+62	 Vücudumun bazı yerlerinde çok defa yanma,gıdıklanma,karıncalanma veya uyuşukluk hissederim
+63	 Büyük abdest yapmada yada tutmada hiçbir güçlük çekmem
+64	 Bazen başkalarının sabrını tüketecek kadar bir şeye saplanır kalırım
+65	 Babamı severim
+66	 Etrafımda başkalarının görmedikleri eşya,hayvanlar veya insanlar görürüm
+67	 Başkalarının mutlu göründüğü kadar mutlu olmayı isterdim
+68	 Ensemde nadiren ağrı hissederim
+69	 Kendi cinsimden olanları oldukça çekici bulurum
+70	 Körebe oyunundan hoşlanırım
+71	 Birçok kimseler başkalarının ilgi ve yardımını sağlamak için talihsizliklerini abartırlar
+72	 hemen hemen her gün mide ağrılarından rahatsız olurum
+73	 Ben önemli bir kimseyim
+74	 Çoğu zaman kız olmayı isterdim
+75	 Ara sıra öfkelenirim
+76	 Çoğu zaman kendimi hüzünlü hissederim
+77	 Aşk romanları okumaktan hoşlanırım
+78	 Şiiri severim
+79	 Kolay incinmem
+80	 Bazen hayvanlara rahat vermem
+81	 Orman bekçiliği gibi işlerden hoşlanacağımı zannediyorum
+82	 Tartışmalarda çabucak yenilirim
+83	 Çok çalışabilen ya da çalışmak isteyen kişinin başarılı olma şansı yüksektir
+84	 Bugünlerde artık hiç ilerleme umudum kalmamış gibi hissediyorum
+85	 Kullanamayacak bile olsam bazen başkalarının ayakkabı, eldiven gibi özel eşyaları o kadar hoşuma gider ki dokunmak ve aşırmak isterim
+86	 Kendime hiç güvenim yoktur
+87	 Çiçek satıcısı olmayı isterdim
+88	 Genel olarak hayatın yaşamaya değer olduğu kanısındayım
+89	 İnsanlara gerçeği kabul ettirmek güçtür
+90	 Bugün yapmam gereken işleri ara sıra yarına bıraktığım olur
+91	 Benimle alay edilmesine aldırmam
+92	 hemşire olmayı isterdim
+93	 Yükselmek için birçok kimse yalan söylemekten çekinmez
+94	 Sonradan pişman olacağım pek çok şeyi yaptığım olur
+95	 Namazımı hemen hemen muntazaman kılarım
+96	 Ailemle pek az kavga ederim
+97	 Bazen zararlı ya da çok kötü işler yapmak için içimde çok güçlü bir istek duyarım
+98	 Kıyamet gününe inanıyorum
+99	 Gürültülü eğlencelere katılmaktan hoşlanıyorum
+100	 Bildiğim bir konuda bir kimse saçma sapan ya da cahilce konuşursa onu hemen düzeltirim
+101	 Bence cinsel yönden kadınlar da erkekler kadar serbest olmalıdır
+102	 En büyük mücadelemi kendimle yaparım
+103	 Vücudumda pek az seğrilme ve kasılma olur
+104	 Başıma ne gelirse gelsin aldırmıyorum
+105	 Keyfim yerinde olmadığı zaman tersliğim üzerimdedir
+106	 Çoğu zaman büyük bir hata ya da kötülük yaptığım duygusuna kapılırım
+107	 Çoğu zaman mutluyumdur
+108	 Çoğu zaman bana, kafam şişmiş ya da burnum tıkanmış gibi gelir
+109	 Bazı kimseler o kadar amirane davranırlar ki, haklı bile olsalar, içimden dediklerinin aksini yapmak gelir
+110	 Bana kötülük etmek isteyen biri var
+111	 Sırf heyecanlanmak için tehlikeli bir işe girişmedim
+112	 Doğru bildiğim şeyler için çoğu zaman direnmek zorunda kalırım
+113	 Kanunların uygulanması gerektiğine inanırım
+114	 Çoğu zaman başımı sıkı bir çember içindeymiş gibi hissederim
+115	 Ahrete inanırım
+116	 Bahse girdiğim yarış veya oyunlardan daha çok zevk alırım
+117	 Bir çok kimseler bana yakalanmaktan korktukları için dürüsttürler
+118	 Dersten kaçtığım için ara sıra müdüre gönderildiğim oldu
+119	 Konuşma tarzım her zamanki gibidir
+120	 Evde sofra adabına dışarıdaki kadar dikkat etmem
+121	 Aleyhimde bazı tertipler kurulduğuna inanıyorum
+122	 Tanıdığım insanların çoğu kadar becerikli ve zeki olduğumu sanıyorum
+123	 Beni takip edenler olduğuna inanıyorum
+124	 Birçokları kaybetmektense çıkarlarını korumak için pek doğru olmayan yollara başvururlar
+125	 Midemden oldukça rahatsızım
+126	 Tiyatrodan hoşlanırım
+127	 Dertlerimin çoğundan kimin sorumlu olduğunu biliyorum
+128	 Kan görünce korkmam ya da fenalaşmam
+129	 Bazen ters ve suratsız olurum
+130	 hiçbir zaman kan kusmadım ya da kan tükürmedim
+131	 hastalığa yakalanacağım diye kaygılanmam
+132	 Çiçek koleksiyonu yapmayı ve evde çiçek yetiştirmeyi severim
+133	 hiçbir zaman normal olmayan cinsel ilişkilere girişmedim
+134	 Bazen kafamdaki düşünceler o kadar hızlıdır ki söylemeyi yetiştiremem
+135	 Fark edilmeyeceğimden emin olsam sinemaya biletsiz girerdim
+136	 Bana iyilik yapan kimselerin genel olarak gizli bir amacı olabileceğini düşünürüm
+137	 Aile hayatımın, tanıdığım kimselerin çoğunun ki kadar iyi olduğuna inanıyorum
+138	 Eleştiri beni çok kırar
+139	 Bazen sanki kendimi ya da başkasını incitmek zorundaymışım gibi hissederim
+140	 Yemek pişirmeyi severim
+141	 Davranışlarımı çoğu zaman etrafımdakilere göre ayarlarım
+142	 Bazen hiçbir işe yaramadığımı düşünürüm
+143	 Çocukken başlarına ne gelirse gelsin aralarındaki birliği koruyan bir gruptaydım
+144	 Asker olmak isterdim
+145	 Bazen biriyle yumruk yumruğa kavgaya girişmeyi istediğim olur
+146	 Seyahat edip, gezip, tozmadıkça mutlu olamam
+147	 Çabuk karar vermediğim için çok fırsat kaçırdım
+148	 Önemli bir iş üzerinde çalışırken başkalarının işimi yarıda kesmeleri sabrımı taşırır
+149	 hatıra defteri tutardım
+150	 Oyunda kaybetmektense kazanmayı tercih ederim
+151	 Biri beni zehirlemeye çalışıyor
+152	 Çoğu geceler zihnimi hiçbir şey kurcalamadan uykuya dalarım
+153	 Son bir kaç yıl içinde sağlığım çoğu zaman iyi idi
+154	 hiç sinir nöbeti ya da havale geçirmedim
+155	 Ne şişmanlıyorum ne de zayıflıyorum
+156	 Bir şeyler yapıp sonra ne yaptığımı hatırlayamadığım zamanlar oldu
+157	 Çoğu kez sebepsiz yere cezalandırıldım
+158	 Çabuk ağlarım
+159	 Okuduğumu eskisi kadar iyi anlayamıyorum
+160	 hayatımda hiçbir zaman kendimi şimdiki kadar iyi hissetmedim
+161	 Bazen başımda bir sızı hissederim
+162	 Birisinin bana kurnazca bir oyun etmesine çok içerlerim
+163	 Çabucak yorulmam
+164	 Üzerinde çalıştığım konularda okumayı ve incelemelerde bulunmayı severim
+165	 Önemli kimseleri tanımayı severim, Çünkü böylece kendimi de önemli bir kimse gibi görürüm
+166	 Yüksek bir yerden aşağıya bakmaya korkarım
+167	 Ailemden herhangi birinin mahkemelik olması beni rahatsız etmez
+168	 Zihnimde bir gariplik var
+169	 Parayı ellemeye korkmam
+170	 Başkalarının hakkımda ne düşündükleri beni rahatsız etmez
+171	 Bir eğlencede başkaları yapsalar bile, ben taşkınlık yapmaktan rahatsız olurum
+172	 Çok kez utangaçlığımı örtbas etmek ihtiyacını duyarım
+173	 Okulu severdim
+174	 hiç bayılma nöbeti geçirmedim
+175	 Pek az başım döner ya da hiç dönmez
+176	 Yılandan büyük bir korkum yoktur
+177	 Annem iyi bir kadındır
+178	 hafızam genellikle iyidir
+179	 Cinsel konularda sıkıntım vardır
+180	 Yeni tanıştığım kimselerle konuşma konusu bulmada güçlük çekerim
+181	 Canım sıkılınca heyecan yaratmayı severim
+182	 Aklımı oynatmaktan korkuyorum
+183	 Dilencilere para vermeyi doğru bulmam
+184	 Sık sık nereden geldiğini bilmediğim sesler duyarım
+185	 herkes kadar iyi işitirim
+186	 Bir şeyler yapmaya girişince ellerimin çok defa titrediğini fark ederim
+187	 Ellerimde beceriksizlik ya da sakarlık başlamadı
+188	 Gözlerim yorulmadan uzun süre okuyabilirim
+189	 Çoğu zaman bütün vücudumda bir halsizlik duyarım
+190	 Başım pek az ağrır
+191	 Bazen utanınca çok ağlarım
+192	 Yürürken dengemi hemen hemen hiç kaybetmem
+193	 Saman nezlesi ya da astım nöbetlerim yoktur
+194	 hareketlerimi ve konuşmamı kontrol edemediğim fakat etrafımda olup bitenden haberdar olduğum nöbetler geçirdiğim oldu
+195	 Tanıdığım herkesi sevmem
+196	 hiç görmediğim yerlere gitmekten hoşlanırım
+197	 Biri beni soymaya (her şeyimi almaya) çalışıyor
+198	 Çok az hayal kurarım
+199	 Çocuklara cinsiyetle ilgili temel gerçekler öğretilmelidir
+200	 Fikir ve düşüncelerimi çalmak isteyen biri var
+201	 Keşke bu kadar utangaç olmasam
+202	 Kendimi cezayı hak etmiş suçlu bir insan olarak görüyorum
+203	 Gazeteci olmak isterdim
+204	 Gazeteci olsaydım daha çok tiyatro haberleri yazmaktan hoşlanırdım
+205	 Bazen çalmaktan ya da dükkanlardan eşya aşırmaktan kendimi alamam
+206	 Birçok kimselerden daha çok dindarımdır
+207	 Çeşitli oyun ve eğlencelerden hoşlanırım
+208	 Flört etmeyi severim
+209	 Günahlarımın affedilmeyeceğine inanıyorum
+210	 her şeyin tadı aynı geliyor
+211	 Gündüzleri uyuyabilirim ancak geceleri uyuyamam
+212	 Evdekiler bana çocuk muamelesi yapıyor
+213	 Yürürken kaldırımdaki yarıklara basmamaya dikkat ederim
+214	 Cildimde üzülmeye değer kabarıklık ya da sivilce yok
+215	 Çok içki kullandım
+216	 Başka ailelere göre bizim evde sevgi ve arkadaşlık pek azdır
+217	 Sık sık kendime bir şeyler dert edinirim
+218	 hayvanların eziyet çektiğini görmek beni üzmez
+219	 İnşaat müteahhitliğinden hoşlanacağımı sanıyorum
+220	 Annemi çok severim
+221	 Bilimden hoşlanırım
+222	 Karşılığını veremeyeceğim durumlarda bile arkadaşlarımdan yardım istemekte güçlük çekmem
+223	 Avlanmayı çok severim
+224	 Annem-babam, hep beraber olduğum kimselerden çok defa hoşlanmıyorlar
+225	 Bazen biraz dedikodu yaptığım olur
+226	 Ailemdeki bazı kişilerde canımı çok sıkan alışkanlıklar var
+227	 Uykuda gezdiğimi söylerler
+228	 Bazen alışılmamış bir kolaylıkla karar verebileceğimi hissediyorum
+229	 Çeşitli kulüp ve derneklere üye olmayı isterim
+230	 Kalbimin hızlı çarptığını hemen hemen hiç hissetmem ve çok seyrek nefesim tıkanır
+231	 Cinsiyet hakkında konuşmayı severim
+232	 Bazen üzerime çok fazla iş alırım
+233	 Pek çok insan karşı çıksa da kendi fikrimi sonuna kadar savunurum
+234	 Çabuk kızar ve çabuk unuturum
+235	 Aile kurallarından oldukça bağımsız ve özgürüm
+236	 Sıklıkla kara kara düşünürüm
+237	 Akrabalarımın hemen hepsi bana karşı anlayış gösterir
+238	 Zaman zaman yerinde duramayacak kadar huzursuzluk duyduğum devreler olur
+239	 Aşkta hayal kırıklığına uğradım
+240	 Görünüşüme hiç aldırmam
+241	 Kendi içimde tutup başkalarına söylenemeyen şeyler hakkında sık sık rüya görürüm
+242	 Birçoklarından daha sinirli sayılmam
+243	 hemen hiç ağrı ve sızım yok
+244	 Davranışlarım başkalarınca yanlış anlaşılmaya elverişlidir
+245	 Ailem beni olduğundan daha hatalı bulur
+246	 Boynumda sık sık kırmızı lekeler olur
+247	 Kimseden sevgi görmüyorum
+248	 Bazen ortada hiç bir neden yokken hatta işler kötüye gittiği zaman bile kendimi fazlası ile mutlu hissederim 
+249	 Öbür dünyada şeytan ve cehennem olduğuna inanırım
+250	 hayatta önüne her geleni kapmaya çalışan insanları suçlamam
+251	 Kendimi kaybedip yaptığım işi aksattığım ve etrafımda olup bitenlerin farkında olmadığım zamanlar oldu
+252	 hiç kimse başkasının derdine aldırış etmiyor
+253	 hatalı davranışlarını görsem bile insanlara arkadaşça davranabilirim
+254	 Birbiriyle şakalaşan kimseler arasında olmayı severim
+255	 Seçimlerde bazen oyumu pek az tanıdığım kimselere veririm
+256	 Gazetelerin ilgi çeken tek yeri resimli mizah sayfasıdır
+257	 Yaptığım işlerde genel olarak başarı elde edeceğime inanırım
+258	 Allah’ın varlığına inanırım
+259	 İşe başlamada güçlük çekerim
+260	 Okulda iken ağır öğrenenlerden biriydim
+261	 Ressam olsaydım çiçek resimleri yapardım
+262	 Daha güzel olmamam beni rahatsız etmez
+263	 Soğuk günlerde bile kolayca terlerim
+264	 Kendime tam anlamıyla güvenim vardır
+265	 hiç kimseye güvenmemek en iyisidir
+266	 haftada bir ya da daha sık, çok heyecanlanırım
+267	 Topluluk içinde olduğumda üzerinde konuşacak uygun konular bulmada güçlük çekerim
+268	 Karamsar olduğum zaman heyecanlı bir olay hemen beni bu durumdan çıkarır
+269	 Bazen zevk için başkalarını kendimden korkuturum
+270	 Evden çıkarken kapının kilitli ve pencerenin kapalı olup olmadığı aklıma takılmaz
+271	 Başkalarının saflığını kendi çıkarına kullanan kimseleri ayıplamam
+272	 Bazen kendimi enerji dolu hissederim
+273	 Derimin bazı yerlerinde uyuşukluk hissederim
+274	 Görme gücüm eskisi kadar kuvvetlidir
+275	 Birisi zihnimi kontrol ediyor
+276	 Çocukları severim
+277	 Bazen bir madrabazın kurnazlığı beni o kadar eğlendirir ki yakayı ele vermemesini dilerim
+278	 Çok defa tanımadığım kimselerin bana eleştirici bir gözle baktıklarını hissederim
+279	 her gün gereğinden fazla su içerim
+280	 Bir çok kimseler kendilerine yararı dokunacağı için arkadaş edinirler
+281	 Kulaklarım pek az çınlar ya da uğuldar
+282	 Genellikle sevdiğim aile üyelerine karşı bazen nefret duyarım
+283	 Gazete muhabiri olsaydım en çok spor haberleri yazmayı isterdim
+284	 hakkımda çok konuşulduğundan eminim
+285	 Ara sıra, açık saçık bir fıkraya güldüğüm olur
+286	 En çok yalnız olduğum zaman mutlu olurum
+287	 Arkadaşlarıma kıyasla beni korkutan şeyler çok azdır
+288	 Mide bulantısı ve kusma nöbetlerine tutulurum
+289	Bir suçlu avukatının becerikliliği sayesinde cezadan kurtulunca kanunlara karşı daima nefret duyarım
+290	 Çok gergin bir hava içinde çalışıyorum
+291	 hayatımda bir ya da bir kaç kere birisinin beni hipnotize ederek bana bir şeyler yaptığını hissettim
+292	 Başkaları benimle konuşuncaya kadar ben onlarla konuşmaya başlamam
+293	 Birisi zihnimi etkilemeye çalışıyor
+294	 Masal okumayı severim
+295	 hiçbir neden yokken kendimi son derece neşeli hissettiğim zamanlar olur
+296	 Kanunla hiç başım derde girmedi
+297	 Cinsiyetle ilgili düşünceler beni rahatsız eder
+298	 Birkaç kişinin birlikte başları derde girince en iyisi yakalarını kurtarmak için aynı hikayeyi uydurmak ve bundan caymamaktır
+299	 Duygularımın bir çok kimselerden yoğun olduğunu düşünürüm
+300	 hayatımda hiçbir zaman bebek oynamaktan hoşlanmadım
+301	 Çoğu zaman hayat benim için bir yüktür
+302	 Cinsel davranışlarımdan dolayı hiçbir zaman başım derde girmedi
+303	 Bazı konularda o kadar alınganım ki onlar hakkında konuşamam bile
+304	 Okulda sınıf karşısında konuşmak bana çok güç gelirdi
+305	 Başkaları ile beraber olduğum zaman bile kendimi yalnız hissederim
+306	 Bana karşı mümkün olan anlayış gösteriliyor
+307	 İyi beceremediğim oyunları oynamaya yanaşmam
+308	 Zaman zaman evi bırakıp gitmek istemişimdir
+309	 Birçokları kadar çabuk arkadaş edinebildiğimi sanıyorum
+310	 Cinsel hayatım doyurucudur
+311	 Gençlik yıllarımda bir devre ufak tefek şeyler çaldım
+312	 İnsanların arasında olmaktan hiç hoşlanmam
+313	 Değerli eşyasını tedbirsizce ortada bırakıp çalınmasına neden olan kimse bunu çalan kadar hatalıdır
+314	 Ara sıra söylenemeyecek kadar kötü şeyler düşünürüm
+315	 hayatın hep kötü tarafları bana nasip olmuştur
+316	 hemen herkesin, başını derde sokmamak için yalan söyleyebileceğine inanırım
+317	 Birçok kimselerden daha hassasım
+318	 Günlük hayatım beni ilgilendiren şeylerle dolu
+319	 Birçok insanlar başkalarına yardım için zahmet çekmekten hoşlanmazlar
+320	 Rüyalarımın çoğu cinsel konularla ilgilidir
+321	 Kolaylıkla mahcup olurum
+322	 Para ve işi kendime dert ederim
+323	 Başımdan çok tuhaf ve acayip yaşantılar geçmiştir
+324	 hiç kimseye aşık olmadım
+325	 Ailemin yaptığı bazı şeyler beni korkutmuştur
+326	 Bazen kontrol edemediğim gülme ve ağlama nöbetlerine tutulurum
+327	 Annem ya da babam çok defa beni makul bulmadığım emirlere bile itaat ettirdiler
+328	 Zihnimi bir konu ya da iş üzerinde toplamakta güçlük çekerim
+329	 hemen hiç rüya görmem
+330	 hiç felç geçirmedim ya da kaslarımda olağanüstü bir halsizlik duymadım
+331	 Eğer insanlar sırf düşmanlık olsun diye beni engellemeseler daha başarılı olurdum
+332	 Bazen nezle olmadığım halde sesim çıkmaz ya da değişir
+333	 Beni hiç kimse anlamıyor
+334	 Bazen tuhaf kokular duyarım
+335	 Zihnimi bir konu üzerinde toplayamam
+336	 İnsanlara karşı sabrım çabuk tükenir
+337	 Çoğunlukla bir takım şeyler, kimseler için meraklanıp huzursuzlaşırım
+338	 hayatımın çoğu, kimselerininkinden daha fazla tasa ve kaygı içinde geçtiğinden eminim
+339	 Çoğu zaman ölmüş olmayı isterdim
+340	 Bazen o kadar heyecanlanırım ki uykuya dalmam güçleşir
+341	 Bazen beni rahatsız edecek kadar iyi işitirim
+342	 Bana söylenenleri hemen unuturum
+343	 Önemsiz ufak şeylerde bile karar verip işe girişmeden önce durur ve düşünürüm
+344	 Gördüğüm bir kimseyle karşılaşmamak için sıklıkla yolumu değiştiririm
+345	 Sıklıkla olup bitenler bana gerçek değilmiş gibi gelir
+346	 Reklamlardaki ampuller gibi önemsiz şeyleri sayma alışkanlığım vardır
+347	 Bana gerçekten kötülük yapmak isteyen hiç bir düşmanım yoktur
+348	 Bana umduğumdan fazla dostluk gösteren insanlara karşı tetikte bulunmaya çalışırım
+349	 Acayip ve tuhaf düşüncelerim vardır
+350	 Yalnızken garip sesler duyarım
+351	 Küçük bir seyahat için bile evden ayrılırken telaşlanır ve kaygılanırım
+352	 Beni incitmeyeceğini bildiğim şeylerden ya da insanlardan bile korktuğum oldu
+353	 Başkalarının daha önce toplanıp konuştuğu bir odaya girmekten çekinmem
+354	 Bıçak gibi çok keskin ve sivri şeyler kullanmaktan korkarım
+355	 Sevdiğim kimseleri bazen incitmekten hoşlanırım
+356	 Dikkatimi bir konu üzerinde toplamada birçoklarından fazla güçlük çekerim
+357	 Yeteneğimi küçümsediğim için birçok defalar başladığım işi yarıda bıraktım
+358	 Kötü ve çok korkunç kelimeler zihnimi kurcalar ve bunlardan kendimi kurtaramam
+359	 Bazen önemsiz düşünceler aklımdan geçer ve beni günlerce rahatsız eder
+360	 hemen her gün beni korkutan bir şey olur
+361	 her şeyi kötüye yorma eğilimindeyim
+362	 Birçok kimselerden çok daha hassasım
+363	 Bazen sevdiğim kimselerin beni incitmesinden hoşlandığım oldu
+364	 hakkımda onur kırıcı ve kötü sözler söylüyorlar
+365	 Kapalı yerlerde huzursuzluk duyarım
+366	 İnsanlar arasında bile olsam çok defa kendimi yalnız hissederim
+367	 Yangından korkmam
+368	 Sonradan pişman olacağım şeyler yapmak ya da söylemek korkusuyla bazen bir kimseden uzak durduğum olur
+369	 Çalışırken acele etmek zorunda olmaktan nefret ederim
+370	 Kararsızlığım yüzünden yapılması gerekli bir çok işi yapamamışımdır
+371	 Aşırı derecede kendini dinleyen bir insan değilim
+372	 Elimdeki işi en iyi şekilde yapmayı isterdim
+373	 Yalnızca bir tek doğru din olduğundan eminim
+374	 Ara sıra zihnim her zamankinden daha ağır işler
+375	 Çok mutlu olduğum ve iyi çalıştığım zamanlarda neşesiz veya dertli bir insanla karşılaşmak keyfimi tamamen kaçırır
+376	 Polisler genellikle dürüsttür
+377	 Toplantılarda karışmaktan çok yalnız başıma oturur ya da bir tek kişiyle ahbaplık ederim
+378	 Kadınları sigara içerken görmekten hoşlanmam
+379	 Çok nadiren karamsarlığa kapılırım
+380	 Ne yapsam zevk alamıyorum
+381	 Kolay öfkelenen biri olduğumu söylerler
+382	 Yapmak istediğim şeylere karar verirken, başkalarının ne düşüneceğini dikkate almam
+383	 İnsanlar çoğu zaman beni hayal kırıklığına uğratırlar
+384	 Kendimle ilgili her şeyi anlatabileceğim hiç kimse yok
+385	 Şimşek çakması da korkularımdan biridir
+386	 Çok tertipli ve titizim
+387	 Ailem her davranışıma fazla karışıyor
+388	 Karanlıkta yalnız kalmaktan korkarım
+389	 Tasarlamış olduğum planlar çok defa o kadar güçlüklerle dolu göründü ki bunlardan vazgeçmek zorunda kaldım
+390	 Birinin hatasını önleme gayretimin yanlış anlaşılmasına çok üzülürüm
+391	 Dansa gitmeyi severim
+392	 Fırtınadan çok korkarım
+393	 Yük çekmeyen atlar dövülmeli ya da kamçılanmalıdır
+394	 Başkalarına sık sık akıl danışırım
+395	 Gelecek, bir insanın planlar yapamayacağı kadar belirsizdir
+396	 İşler yolunda gittiği zaman bile çoğu kez her şeye karşı bir aldırmazlık içinde olduğumu hissederim
+397	 Bazen güçlükler öylesine üst üste gelir ki onlarla baş edemeyecekmişim gibi hissederim
+398	 Çoğu kez “keşke tekrar çocuk olsaydım” diye düşünürüm
+399	 Kolay kolay kızmam
+400	 Eğer bana fırsat verilse dünya için çok yararlı işler yapabilirim
+401	 Sudan hiç korkmam
+402	 Ne yapacağıma karar vermeden önce uzun uzun düşünürüm
+403	 Çok şeylerin olup bittiği bu devirde yaşamak hoş bir şey
+404	 hatalarını düzelterek kendilerine yardım etmeye çalıştığım insanlar amacımı çoğu kez yanlış anlarlar
+405	 Yutkunmakta güçlük çekmem
+406	 Uzman dendiği halde benden pek fazla bilgili olmayan insanlarla sıklıkla karşılaşırım
+407	 Genel olarak sakinim ve kolay sinirlenmem
+408	 Bazı konular hakkında hislerimi o kadar gizleyebilirim ki, insanlar bilmeden beni incitebilirler
+409	 Elimde olmadan çok ufak şeyden münakaşa çıkarıp karşımdakini kırıyorum
+410	 Madrabazı kendi silahı ile alt etmekten hoşlanırım
+411	 İyi tanıdığım bir kimsenin başarısını duyduğum zaman adeta kendimi başarısızlığa uğramış hissederim
+412	 hastalık yüzünden doktora gitmekten korkmam
+413	 Günahlarım için ne kadar ağır ceza görsem iyidir
+414	 hayal kırıklıklarını o kadar ciddiye alırım ki bunları zihnimden söküp atamam
+415	 Fırsat verilse iyi bir önder olurum
+416	 Yakınlarımın sağlığından çok endişe ederim
+417	 Sırada beklerken biri önüme geçmeye kalkışırsa ona çıkışırım
+418	 Bazen hiçbir işe yaramadığımı düşünürüm
+419	 Küçükken okuldan sık sık kaçardım
+420	 Başımdan din ile ilgili olağanüstü yaşantılar geçti
+421	 Ailemde çok sinirli insanlar var
+422	 Ailemden bazı kişilerin yapmış olduğu bazı işler beni utandırmıştır
+423	 Balık tutmayı çok severim
+424	 hemen her zaman açlık duyarım
+425	 Sık sık rüya görürüm
+426	 Kaba ya da can sıkıcı insanlara karşı bazen sert davrandığım olur
+427	 Açık saçık hikayelerden utanıp rahatsız olurum
+428	 Gazetelerin baş yazılarını okumaktan hoşlanırım
+429	 Ciddi konular üzerinde verilen konferansları dinlemekten hoşlanırım
+430	 Karşı cinsten olanları çekici bulurum
+431	 Başa gelebilecek talihsizlikler beni oldukça telaşlandırır
+432	 Kuvvetli siyasi fikirlerim vardır
+433	 Bir zamanlar hayali arkadaşlarım vardı
+434	 Otomobil yarışçısı olmayı isterdim
+435	 Genel olarak kadınlarla çalışmayı tercih ederim
+436	 İnsanlar genel olarak başkalarının haklarına saygı göstermekten çok kendi haklarına saygı gösterilmesini isterler
+437	 Kanuna aykırı davranmadan, kanunun bir gediğinden yararlanmakta zarar yoktur
+438	 Bazı insanlardan o kadar nefret ederim ki ettiklerini bulunca içimden oh derim
+439	 Beklemek zorunda kalmak beni sinirlendirir
+440	 Başkalarına anlatmak için hoş fıkraları hatırımda tutmaya çalışırım
+441	 Uzun boylu kadınlardan hoşlanırım
+442	 Üzüntü yüzünden uyuyamadığım zamanlar oldu
+443	 Başkalarının gereği gibi yapamadığımı sandığı şeyleri yapmaktan vazgeçtiğim oldu
+444	 Başkalarının cahilce inançlarını düzeltmeye çalışmam
+445	 Küçükken heyecan veren şeyler yapmaktan hoşlanırdım
+446	 Az para ile oynanan kumardan hoşlanırım
+447	 Mastürbasyonda kendi cinsimle ilgili hayal beni tahrik eder
+448	 Sokakta, otobüs ve dükkanda bana bakan insanlardan rahatsız olurum
+449	 İnsanlarla bir arada olmayı sağladığı için toplantı ve davetleri severim
+450	 Kalabalığın verdiği coşkudan hoşlanırım
+451	 Neşeli arkadaşlar arasına karışınca üzüntülerimi unuturum
+452	 Arkadaş edinemiyorum
+453	 Küçükken mahalledeki arkadaş ya da akran gruplarına katılmaktan hoşlanmazdım
+454	 Orman ya da dağdaki bir kulübede tek başıma yaşamaktan mutlu olabilirdim
+455	 İçinde bulunduğum grubun dedikodularına ve konuşmalarına sıklıkla konu olmam
+456	 İnsan makul bulmadığı kanunlara aykırı hareketlerinden dolayı cezalandırılmamalıdır
+457	 Bence insan hiçbir zaman alkollü bir içkiyi ağzına almamalıdır
+458	 Çocukken benimle en fazla ilgilenen erkek baba, üvey baba vb bana karşı çok sert davranırdı
+459	 Çaba göstermekle yenemeyeceğimi bildiğim bazı kötü alışkanlıklarım var
+460	 Az içki kullandım ya da hiç kullanmadım
+461	 Kısa bir zaman için bile olsa başladığım işi bir kenara bırakmak bana güç gelir
+462	 Küçük abdestimi yapmada ya da tutmada güçlük çekmem
+463	 Sek sek oyunu oynamaktan hoşlanırdım
+464	 hiç hayal görmedim
+465	 Bir kaç kez hayatım boyunca yaptığım işte hevesimi yitirdiğim olmuştur
+466	 Doktor önerisi dışında hiçbir ilaç ya da uyku ilacı kullanmadım
+467	 Çok defa (otomobil plaka numarası gibi) hiç önemi olmayan numaraları ezberledim
+468	 Sıklıkla sinirli ve asık suratlı olurum
+469	 Onlardan önce düşündüğüm için başkaları, benim fikirlerimi kıskanıyorlar
+470	 Cinsiyetle ilgili şeylerden nefret ederim
+471	 Okulda, hal ve gidişten kırık not alırdım
+472	 Yangın karşısında büyülenmiş gibi olurum
+473	 Mümkün olduğu kadar kalabalıktan uzak kalmaya çalışırım
+474	 Başkalarından daha sık abdeste çıkmam
+475	 Sıkıştırıldığım zaman gerçeğin ancak bana zarar vermeyecek kısmını söylerim
+476	 Tanrı bana özel bir görev vermiştir
+477	 Arkadaşlarımla birlikte işlediğim bir suçtan eşit şekilde suçlu olduğum zaman onları ele vermektense bütün suçu üzerime almayı tercih ederim
+478	 Çok daha değişik bir aile ortamından gelmiş olmayı isterdim
+479	 Yabancılarla tanışmaktan kaçınmam
+480	 Karanlıktan çok defa korkarım
+481	 Bir şeyden kurtulmak için hasta numarası yaptığım olmuştur
+482	 Trende,otobüste vb rastladığım kimselerle çok defa konuşurum
+483	 Peygamberimiz göğe çıkma gibi mucizeler göstermiştir
+484	 homoseksüelliği çok iğrenç bulurum
+485	 Bir erkek bir kadınla beraber olunca genel olarak onun cinsiyetiyle ilgili şeyler düşünür
+486	 İdrarımda hiçbir zaman kan görmedim
+487	 Uğraştığım iş yolunda gitmeyince hemen vazgeçerim
+488	 Sık sık dua ederim
+489	 Yaşamı yalnızca üzüntülü,sıkıntılı tarafları ile benimseyen insanlara sempati duyarım
+490	 haftada birkaç kere Kuran okurum
+491	 Sadece bir tek dinin doğruluğuna inananlara tahammül edemem
+492	 Zelzele düşüncesi beni çok korkutur
+493	 Tam dikkat isteyen işleri,beni dikkatsizliğe sürükleyen işlere tercih ederim
+494	 Kapalı ve küçük yerlerde bulunmaktan çok rahatsız olurum
+495	 Kusurlarını düzeltmeye çalıştığım insanlarla genel olarak gayet açık konuşurum
+496	 Eşyayı hiçbir zaman çift görmem
+497	 Macera hikayelerinden hoşlanırım
+498	 Açık sözlü olmak her zaman iyidir
+499	 Gerçekten önemsiz olan bir şey üzerinde bazen sebepsiz olarak haddinden fazla üzüldüğüm olur
+500	 Bana parlak gelen bir fikre hemen kapılır giderim
+501	 Başkalarından yardım beklemektense genel olarak bir işi kendi başıma yapmayı tercih ederim
+502	 herhangi bir olay hakkındaki görüşümü başkalarına açıkça belirtmekten hoşlanırım
+503	 Başkalarının hareketlerini çok beğenip beğenmediğimi pek belli etmem
+504	 Değersiz gördüğüm ya da acıdığım kimseye bu duygularımı belli etmekten çekinmem
+505	 Zaman zaman kendimi öyle güçlü ve enerjik hissederim ki böyle zamanlarda günlerce uykuya ihtiyaç duymadığım olur
+506	 Sinirleri çok gergin bir insanım
+507	 İşler iyi gidince aslan payını kendilerine alan fakat hata yapılınca bunu başkalarının üzerine atan insanlarla karşılaştım
+508	 Koku alma duyum, herkes kadar iyidir
+509	 Bazen çekingenliğim yüzünden hakkımı arayamam
+510	 Pislik ve kir beni ürkütüp iğrendirir
+511	 herkesten gizli tuttuğum bir hayal dünyam var
+512	 Yıkanmaktan hoşlanmam
+513	 Kış mevsimini severim
+514	 Erkek gibi davranan kadınlardan hoşlanırım
+515	 Evimizde daima ihtiyaç maddeleri bulunurdu
+516	 Ailemde çabuk kızan kimseler var
+517	 hiçbir şeyi iyi yapamam
+518	 Bazı durumlarda olduğundan daha fazla üzüntülü görünmeye çalıştığım olmuştur
+519	 Cinsel organlarımda bir bozukluk var
+520	 Genel olarak görüşlerimi kuvvetle savunurum
+521	 Bir grup içinde konuşma yapmam ve çok iyi bildiğim bir konuda fikrimi söylemem istenince kaygılanmam
+522	 Örümcekten korkmam
+523	 Yüzüm hemen hemen hiç kızarmaz
+524	 Kapı tokmaklarından hastalık veya mikrop alacağımdan korkmam
+525	 Bazı hayvanlardan ürkerim
+526	 Gelecek bana ümitsiz görünüyor
+527	 Ailem ve yakın akrabalarım birbirleri ile oldukça iyi geçinirler
+528	 Yüzüm başkalarından daha sık kızarmaz
+529	 Pahalı elbiseler giymeyi isterim
+530	 Sebepsiz yere sık sık içim sıkılıyor ve ağlamak istiyorum
+531	 Bir konu üzerinde karar verdiğimi zannetsem bile başka biri fikrimi kolayca değiştirebilir
+532	 Acıya başkaları kadar ben de dayanabilirim
+533	 Sık sık geğirmekten şikayetim yoktur
+534	 Çoğunlukla başladığım işten en son vazgeçen ben olurum
+535	 hemen her zaman ağzımda kuruluk olur
+536	 Beni acele ettirenlere kızarım
+537	 Afrika’da aslan avına çıkmak isterdim
+538	 Terzilikten hoşlanabileceğimi sanıyorum
+539	 Fareden korkmam
+540	 Yüzüme hiç felç inmedi
+541	 Cildime ufak bir şeyin dokunmasından çok huylanırım
+542	 Şimdiye kadar rengi kapkara büyük abdest yapmadım
+543	 haftada birkaç kez, korkunç bir şey olacakmış duygusuna kapılırım
+544	 Çoğu zaman yorgunluk hissederim
+545	 Bazen aynı rüyayı tekrar tekrar görürüm
+546	 Tarih okumaktan hoşlanırım
+547	 Toplantı ve kalabalık eğlencelerden hoşlanırım
+548	 Elimdeyse açık saçık numaraların yapıldığı eğlence yerlerine gitmem
+549	 Karşıma çıkacak güçlüklerden korkar ve kaçarım
+550	 Kapı mandallarını onarmaktan hoşlanırım
+551	 Bazen başkalarının kafamın içindekilerini okuduğundan eminim
+552	 Bilimsel yayınları okumaktan hoşlanırım
+553	 Açık yerlerde ya da geniş meydanlarda tek başıma kalmaktan korkarım
+554	 Sıkıntım oldukça alkol alırım
+555	 Bazen çıldıracakmış gibi olurum
+556	 Kılık kıyafetime çok itina ederim
+557	 hayatı fazla ciddiye almıyorum
+558	 Birçok kimseler kötü cinsel faaliyetlerinden dolayı suçludurlar
+559	 Gece yarısı çoğunlukla korkuya kapıldığım olur
+560	 Bir şeyi nereye koyduğumu unutmaktan çok şikayetçiyim
+561	 Ailem benim için büyük bir dayanaktır
+562	 Çocukken en fazla bağlandığım ve hayran kaldığım kimse bir kadındı
+563	 Macera hikayelerini aşk hikayelerinden daha çok severim
+564	 Yapmak istediğim fakat başkalarının beğenmediği bir işten kolayca vazgeçerim
+565	 Yüksek bir yerde iken içimden atlama isteği gelir
+566	 Sinemalarda aşk sahnelerini severim
+
+        `;
+
+        const questions = questionsText.trim().split('\n');
+
+        const lTestQuestions = [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 195, 225, 255, 285];
+        const fTestAQuestions = [14, 23, 27, 31, 34, 35, 40, 42, 48, 49, 50, 53, 56, 66, 85, 121, 123, 139, 146, 151, 156, 168, 184, 197, 200, 202, 205, 206, 209, 210, 211, 215, 218, 227, 245, 246, 247, 252, 256, 269, 275, 286, 291, 293];
+        const fTestBQuestions = [17, 20, 54, 65, 75, 83, 112, 113, 115, 164, 169, 177, 185, 196, 199, 220, 257, 258, 272, 276];
+        const kTestAQuestions = [96];
+        const kTestBQuestions = [30, 39, 71, 89, 124, 129, 134, 138, 142, 148, 160, 170, 171, 180, 183, 217, 234, 267, 272, 296, 316, 322, 374, 383, 397, 398, 406, 461, 502];
+        const hsTestAQuestions = [23, 29, 43, 62, 72, 108, 114, 125, 161, 189, 273];
+        const hsTestBQuestions = [2, 3, 7, 9, 18, 51, 55, 63, 68, 103, 130, 153, 155, 163, 175, 188, 190, 192, 230, 243, 274, 281];
+        const dTestAQuestions = [5, 13, 23, 32, 41, 43, 52, 67, 86, 104, 130, 138, 142, 158, 159, 182, 189, 193, 236, 259];
+        const dTestBQuestions = [2, 8, 9, 18, 30, 36, 39, 46, 51, 57, 58, 64, 80, 88, 89, 95, 98, 107, 122, 131, 145, 152, 153, 154, 155, 160, 178, 191, 207, 208, 233, 241, 242, 248, 263, 270, 271, 272, 285, 296];
+        const hyTestAQuestions = [10, 23, 32, 43, 44, 47, 76, 114, 179, 186, 189, 238, 253];
+        const hyTestBQuestions = [2, 3, 6, 7, 8, 9, 12, 26, 30, 51, 55, 71, 89, 93, 103, 107, 109, 124, 128, 129, 136, 137, 141, 147, 153, 160, 162, 163, 170, 172, 174, 175, 180, 188, 190, 192, 201, 213, 230, 234, 243, 265, 267, 274, 279, 289, 292];
+        const pdTestAQuestions = [16, 21, 24, 32, 33, 35, 38, 42, 61, 67, 84, 94, 102, 106, 110, 118, 127, 215, 216, 224, 239, 244, 245, 284];
+        const pdTestBQuestions = [8, 20, 37, 82, 91, 96, 107, 134, 137, 141, 155, 170, 171, 173, 180, 183, 201, 231, 235, 237, 248, 267, 287, 289, 294, 296];
+        const mfErkekAQuestions = [4, 25, 69, 70, 74, 77, 78, 87, 92, 126, 132, 134, 140, 149, 179, 187, 203, 204, 217, 226, 231, 239, 261, 278, 282, 295, 297, 299];
+        const mfErkekBQuestions = [1, 19, 26, 28, 79, 80, 81, 89, 99, 112, 115, 116, 117, 120, 133, 144, 176, 198, 213, 214, 219, 221, 223, 229, 249, 254, 260, 262, 264, 280, 283, 300];
+        const mfKadinAQuestions = [4, 25, 70, 74, 77, 78, 87, 92, 126, 132, 134, 140, 149, 187, 203, 204, 217, 226, 239, 261, 278, 282, 295, 299, 133];
+        const mfKadinBQuestions = [1, 19, 26, 28, 79, 80, 81, 89, 99, 112, 115, 116, 117, 120, 144, 176, 198, 213, 214, 219, 221, 223, 229, 249, 254, 260, 262, 264, 280, 283, 300, 69, 179, 231, 297];
+        const paTestAQuestions = [15, 16, 22, 24, 27, 35, 110, 121, 123, 127, 151, 157, 158, 202, 275, 284, 291, 293, 299, 305, 317, 338, 341, 364, 365];
+        const paTestBQuestions = [93, 107, 109, 111, 117, 124, 268, 281, 294, 313, 316, 319, 327, 347, 348];
+        const ptTestAQuestions = [10, 15, 22, 32, 41, 67, 76, 86, 94, 102, 106, 142, 159, 182, 189, 217, 238, 266, 301, 304, 305, 317, 321, 336, 337, 340, 342, 343, 344, 346, 349, 351, 352, 356, 357, 358, 359, 360, 361];
+        const ptTestBQuestions = [3, 8, 36, 122, 152, 164, 178, 329, 353];
+        const scTestAQuestions = [15, 16, 21, 22, 24, 33, 35, 38, 40, 41, 47, 52, 76, 97, 104, 121, 156, 157, 159, 168, 179, 182, 194, 202, 210, 238, 241, 251, 259, 266, 273, 282, 291, 297, 301, 303, 305, 307, 312, 320, 324, 325, 332, 334, 335, 339, 341, 345, 349, 350, 352, 354, 355, 356, 360, 363, 364, 32, 212];
+        const scTestBQuestions = [8, 17, 20, 37, 65, 103, 119, 177, 178, 187, 192, 196, 220, 276, 281, 306, 309, 322, 330];
+        const maTestAQuestions = [11, 13, 21, 22, 59, 64, 73, 97, 100, 109, 127, 134, 143, 156, 157, 167, 181, 194, 212, 222, 226, 228, 232, 233, 238, 240, 250, 251, 263, 266, 268, 271, 277, 279, 298];
+        const maTestBQuestions = [101, 105, 111, 119, 120, 148, 166, 171, 180, 267, 289];
+        const siTestAQuestions = [32, 67, 82, 111, 117, 124, 138, 147, 171, 172, 180, 201, 236, 267, 278, 292, 304, 316, 321, 332, 336, 342, 357, 377, 383, 398, 411, 427, 436, 455, 473, 487, 549, 564];
+        const siTestBQuestions = [25, 33, 57, 91, 99, 119, 126, 143, 193, 208, 229, 231, 254, 262, 281, 296, 309, 353, 359, 371, 391, 400, 415, 440, 446, 449, 450, 451, 462, 469, 479, 481, 482, 505, 521, 547];
+     
+     
+      
+
+        // Sayfa yüklendiğinde soruları oluştur
+        window.onload = function() {
+            const container = document.getElementById('questionsContainer');
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+
+                const label = document.createElement('label');
+                label.textContent = question;
+                questionDiv.appendChild(label);
+
+                for (let i = 0; i <= 2; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question_${index + 1}`;
+                    input.value = i;
+                    input.id = `question_${index + 1}_${i}`;
+                    
+                    const inputLabel = document.createElement('label');
+                    inputLabel.setAttribute('for', `question_${index + 1}_${i}`);
+                    inputLabel.textContent = i;
+
+                    questionDiv.appendChild(input);
+                    questionDiv.appendChild(inputLabel);
+                }
+
+                container.appendChild(questionDiv);
+            });
+        };
+      
+      
+
+      
+      
+      
+ function goToTest() {
+        document.getElementById('formPage').classList.remove('visible');
+        document.getElementById('testPage').classList.add('visible');
+    }
+
+    function goBackToForm() {
+        document.getElementById('testPage').classList.remove('visible');
+        document.getElementById('formPage').classList.add('visible');
+    }
+
+    function clearForm() {
+        document.getElementById('userInfoForm').reset();
+        document.getElementById('testForm').reset();
+    }
+
+        // Simüle edilmiş cevapları doldur
+        function simulateAnswers() {
+            questions.forEach((question, index) => {
+                const randomAnswer = Math.floor(Math.random() * 3);
+                document.getElementById(`question_${index + 1}_${randomAnswer}`).checked = true;
+            });
+        }
+      
+      
+
+         const kTable = {
+    0: { k5: 0, k4: 0, k2: 0 },
+    1: { k5: 1, k4: 1, k2: 0 },
+    2: { k5: 1, k4: 1, k2: 0 },
+    3: { k5: 2, k4: 2, k2: 1 },
+    4: { k5: 2, k4: 2, k2: 1 },
+    5: { k5: 3, k4: 2, k2: 1 },
+    6: { k5: 3, k4: 2, k2: 1 },
+    7: { k5: 4, k4: 3, k2: 1 },
+    8: { k5: 4, k4: 3, k2: 2 },
+    9: { k5: 5, k4: 4, k2: 2 },
+    10: { k5: 5, k4: 4, k2: 2 },
+    11: { k5: 6, k4: 4, k2: 2 },
+    12: { k5: 6, k4: 5, k2: 2 },
+    13: { k5: 7, k4: 5, k2: 3 },
+    14: { k5: 7, k4: 6, k2: 3 },
+    15: { k5: 8, k4: 6, k2: 3 },
+    16: { k5: 8, k4: 6, k2: 3 },
+    17: { k5: 9, k4: 7, k2: 3 },
+    18: { k5: 9, k4: 7, k2: 4 },
+    19: { k5: 10, k4: 8, k2: 4 },
+    20: { k5: 10, k4: 8, k2: 4 },
+    21: { k5: 11, k4: 8, k2: 4 },
+    22: { k5: 11, k4: 9, k2: 4 },
+    23: { k5: 12, k4: 9, k2: 5 },
+    24: { k5: 12, k4: 10, k2: 5 },
+    25: { k5: 13, k4: 10, k2: 5 },
+    26: { k5: 13, k4: 10, k2: 5 },
+    27: { k5: 14, k4: 11, k2: 5 },
+    28: { k5: 14, k4: 11, k2: 6 },
+    29: { k5: 15, k4: 12, k2: 6 },
+    30: { k5: 15, k4: 12, k2: 6 }
+};
+        // Ham puanları hesapla ve sonucu göster
+        function calculateAllScales() {
+            const formData = new FormData(document.getElementById('testForm'));
+
+            let lHamPuan = 0;
+            let fHamPuan = 0;
+            let kHamPuan = 0;
+            let hsHamPuan = 0;
+            let dHamPuan = 0;
+            let hyHamPuan = 0;
+            let pdHamPuan = 0;
+            let mfErkekHamPuan = 0;
+            let mfKadinHamPuan = 0;
+            let paHamPuan = 0;
+            let ptHamPuan = 0;
+            let scHamPuan = 0;
+            let maHamPuan = 0;
+            let siHamPuan = 0;
+            let questionMarkHamPuan = 0;
+
+          const kValues = kTable[kHamPuan] || { k5: 0, k4: 0, k2: 0 };  
+          
+          
+          
+          
+            // L testi için
+            lTestQuestions.forEach(questionNumber => {
+                const answer = formData.get(`question_${questionNumber}`);
+                if (answer === '2') {
+                    lHamPuan++;
+                }
+            });
+
+            // F testi için
+            fTestAQuestions.forEach(questionNumber => {
+                const answer = formData.get(`question_${questionNumber}`);
+                if (answer === '1') {
+                    fHamPuan++;
+                }
+            });
+            fTestBQuestions.forEach(questionNumber => {
+                const answer = formData.get(`question_${questionNumber}`);
+                if (answer === '2') {
+                    fHamPuan++;
+                }
+            });
+
+            // K testi için
+            kTestAQuestions.forEach(questionNumber => {
+                const answer = formData.get(`question_${questionNumber}`);
+                if (answer === '1') {
+                    kHamPuan++;
+                }
+            });
+            kTestBQuestions.forEach(questionNumber => {
+                const answer = formData.get(`question_${questionNumber}`);
+                if (answer === '2') {
+                    kHamPuan++;
+                }
+            });
+          
+          // HS testi için
+hsTestAQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '1') {
+            hsHamPuan++;
+        }
+    });
+    hsTestBQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '2') {
+            hsHamPuan++;
+        }
+    });
+  
+
+// D testi için
+dTestAQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '1') {
+        dHamPuan++;
+    }
+});
+dTestBQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '2') {
+        dHamPuan++;
+    }
+});
+
+// HY testi için
+hyTestAQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '1') {
+        hyHamPuan++;
+    }
+});
+hyTestBQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '2') {
+        hyHamPuan++;
+    }
+});
+
+// PD testi için
+pdTestAQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '1') {
+            pdHamPuan++;
+        }
+    });
+    pdTestBQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '2') {
+            pdHamPuan++;
+        }
+    });
+   
+
+// MF ERKEK testi için
+mfErkekAQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '1') {
+        mfErkekHamPuan++;
+    }
+});
+mfErkekBQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '2') {
+        mfErkekHamPuan++;
+    }
+});
+
+// MF KADIN testi için
+mfKadinAQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '1') {
+        mfKadinHamPuan++;
+    }
+});
+mfKadinBQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '2') {
+        mfKadinHamPuan++;
+    }
+});
+
+// PA testi için
+paTestAQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '1') {
+        paHamPuan++;
+    }
+});
+paTestBQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '2') {
+        paHamPuan++;
+    }
+});
+
+// PT testi için
+ptTestAQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '1') {
+            ptHamPuan++;
+        }
+    });
+    ptTestBQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '2') {
+            ptHamPuan++;
+        }
+    });
+   
+
+// SC testi için
+scTestAQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '1') {
+            scHamPuan++;
+        }
+    });
+    scTestBQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '2') {
+            scHamPuan++;
+        }
+    });
+    
+
+// MA testi için
+maTestAQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '1') {
+            maHamPuan++;
+        }
+    });
+    maTestBQuestions.forEach(questionNumber => {
+        const answer = formData.get(`question_${questionNumber}`);
+        if (answer === '2') {
+            maHamPuan++;
+        }
+    });
+   
+
+// Sİ testi için
+siTestAQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '1') {
+        siHamPuan++;
+    }
+});
+siTestBQuestions.forEach(questionNumber => {
+    const answer = formData.get(`question_${questionNumber}`);
+    if (answer === '2') {
+        siHamPuan++;
+    }
+});
+
+// ? testi için (boş yanıtlar sayılıyor)
+for (let i = 1; i <= totalQuestions; i++) {
+    const answer = formData.get(`question_${i}`);
+    if (answer === '0') {
+        questionMarkHamPuan++;
+    }
+}
+          // Referans tablosundan düzeltmeleri alın
+const hsCorrectedHamPuan = hsHamPuan + kTable[kHamPuan].k5;  // K+5 düzeltmesi HS için
+const pdCorrectedHamPuan = pdHamPuan + kTable[kHamPuan].k4;  // K+4 düzeltmesi PD için
+const maCorrectedHamPuan = maHamPuan + kTable[kHamPuan].k2;  // K+2 düzeltmesi MA için
+const ptCorrectedHamPuan = ptHamPuan + kHamPuan;
+const scCorrectedHamPuan = scHamPuan + kHamPuan;
+        
+          
+            // L testi için Erkek T puanı hesaplama
+function calculateLTpuanErkek(hamPuanL) {
+    const M_L_Erkek = 6.45; // Erkek için ortalama (M)
+    const stdDev_L_Erkek = 2.74; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanL_erkek = (hamPuanL - M_L_Erkek) / stdDev_L_Erkek;
+
+    // T puanı hesaplama
+    const tPuanL_erkek = (zPuanL_erkek * 10) + 50;
+
+    return tPuanL_erkek;
+}
+
+// L testi için Kadın T puanı hesaplama
+function calculateLTpuanKadin(hamPuanL) {
+    const M_L_Kadin = 6; // Kadın için ortalama (M)
+    const stdDev_L_Kadin = 2.25; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanL_kadin = (hamPuanL - M_L_Kadin) / stdDev_L_Kadin;
+
+    // T puanı hesaplama
+    const tPuanL_kadin = (zPuanL_kadin * 10) + 50;
+
+    return tPuanL_kadin;
+}  
+          // F testi için Erkek T puanı hesaplama
+function calculateFTpuanErkek(hamPuanF) {
+    const M_F_Erkek = 8.3; // Erkek için ortalama (M)
+    const stdDev_F_Erkek = 4.62; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanF_erkek = (hamPuanF - M_F_Erkek) / stdDev_F_Erkek;
+
+    // T puanı hesaplama
+    const tPuanF_erkek = (zPuanF_erkek * 10) + 50;
+
+    return tPuanF_erkek;
+}
+
+// F testi için Kadın T puanı hesaplama
+function calculateFTpuanKadin(hamPuanF) {
+    const M_F_Kadin = 9.38; // Kadın için ortalama (M)
+    const stdDev_F_Kadin = 5.16; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanF_kadin = (hamPuanF - M_F_Kadin) / stdDev_F_Kadin;
+
+    // T puanı hesaplama
+    const tPuanF_kadin = (zPuanF_kadin * 10) + 50;
+
+    return tPuanF_kadin;
+}
+
+          // K testi için Erkek T puanı hesaplama
+function calculateKTpuanErkek(hamPuanK) {
+    const M_K_Erkek = 13.98; // Erkek için ortalama (M)
+    const stdDev_K_Erkek = 4.65; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanK_erkek = (hamPuanK - M_K_Erkek) / stdDev_K_Erkek;
+
+    // T puanı hesaplama
+    const tPuanK_erkek = (zPuanK_erkek * 10) + 50;
+
+    return tPuanK_erkek;
+}
+
+// K testi için Kadın T puanı hesaplama
+function calculateKTpuanKadin(hamPuanK) {
+    const M_K_Kadin = 11.82; // Kadın için ortalama (M)
+    const stdDev_K_Kadin = 3.8; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanK_kadin = (hamPuanK - M_K_Kadin) / stdDev_K_Kadin;
+
+    // T puanı hesaplama
+    const tPuanK_kadin = (zPuanK_kadin * 10) + 50;
+
+    return tPuanK_kadin;
+}
+             // HS testi için Erkek T puanı hesaplama
+function calculateHSTpuanErkek(hsCorrectedHamPuan) {
+    const M_HS_Erkek = 13.19; // Erkek için ortalama (M)
+    const stdDev_HS_Erkek = 4.07; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanHS_erkek = (hsCorrectedHamPuan - M_HS_Erkek) / stdDev_HS_Erkek;
+
+    // T puanı hesaplama
+    const tPuanHS_erkek = (zPuanHS_erkek * 10) + 50;
+
+    return tPuanHS_erkek;
+}
+
+// HS testi için Kadın T puanı hesaplama
+function calculateHSTpuanKadin(hsCorrectedHamPuan) {
+    const M_HS_Kadin = 15.89; // Kadın için ortalama (M)
+    const stdDev_HS_Kadin = 4.88; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanHS_kadin = (hsCorrectedHamPuan - M_HS_Kadin) / stdDev_HS_Kadin;
+
+    // T puanı hesaplama
+    const tPuanHS_kadin = (zPuanHS_kadin * 10) + 50;
+
+    return tPuanHS_kadin;
+}
+          // D testi için Erkek T puanı hesaplama
+function calculateDTpuanErkek(hamPuanD) {
+    const M_D_Erkek = 20.63; // Erkek için ortalama (M)
+    const stdDev_D_Erkek = 4.76; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanD_erkek = (hamPuanD - M_D_Erkek) / stdDev_D_Erkek;
+
+    // T puanı hesaplama
+    const tPuanD_erkek = (zPuanD_erkek * 10) + 50;
+
+    return tPuanD_erkek;
+}
+
+// D testi için Kadın T puanı hesaplama
+function calculateDTpuanKadin(hamPuanD) {
+    const M_D_Kadin = 23.86; // Kadın için ortalama (M)
+    const stdDev_D_Kadin = 5.08; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanD_kadin = (hamPuanD - M_D_Kadin) / stdDev_D_Kadin;
+
+    // T puanı hesaplama
+    const tPuanD_kadin = (zPuanD_kadin * 10) + 50;
+
+    return tPuanD_kadin;
+}
+            
+   // HY testi için Erkek T puanı hesaplama
+function calculateHYTpuanErkek(hamPuanHY) {
+    const M_HY_Erkek = 19.31; // Erkek için ortalama (M)
+    const stdDev_HY_Erkek = 4.71; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanHY_erkek = (hamPuanHY - M_HY_Erkek) / stdDev_HY_Erkek;
+
+    // T puanı hesaplama
+    const tPuanHY_erkek = (zPuanHY_erkek * 10) + 50;
+
+    return tPuanHY_erkek;
+}
+
+// HY testi için Kadın T puanı hesaplama
+function calculateHYTpuanKadin(hamPuanHY) {
+    const M_HY_Kadin = 18.12; // Kadın için ortalama (M)
+    const stdDev_HY_Kadin = 5.31; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanHY_kadin = (hamPuanHY - M_HY_Kadin) / stdDev_HY_Kadin;
+
+    // T puanı hesaplama
+    const tPuanHY_kadin = (zPuanHY_kadin * 10) + 50;
+
+    return tPuanHY_kadin;
+}
+ // PD testi için Erkek T puanı hesaplama
+function calculatePDTpuanErkek(pdCorrectedHamPuan) {
+    const M_PD_Erkek = 22.22; // Erkek için ortalama (M)
+    const stdDev_PD_Erkek = 4.45; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanPD_erkek = (pdCorrectedHamPuan - M_PD_Erkek) / stdDev_PD_Erkek;
+
+    // T puanı hesaplama
+    const tPuanPD_erkek = (zPuanPD_erkek * 10) + 50;
+
+    return tPuanPD_erkek;
+}
+
+// PD testi için Kadın T puanı hesaplama
+function calculatePDTpuanKadin(pdCorrectedHamPuan) {
+    const M_PD_Kadin = 22.84; // Kadın için ortalama (M)
+    const stdDev_PD_Kadin = 4.51; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanPD_kadin = (pdCorrectedHamPuan - M_PD_Kadin) / stdDev_PD_Kadin;
+
+    // T puanı hesaplama
+    const tPuanPD_kadin = (zPuanPD_kadin * 10) + 50;
+
+    return tPuanPD_kadin;
+}
+// MF Erkek testi için Erkek T puanı hesaplama
+function calculateMFTpuanErkek(hamPuanMFErkek) {
+    const M_MF_Erkek = 29.21; // Erkek için ortalama (M)
+    const stdDev_MF_Erkek = 3.82; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanMF_erkek = (hamPuanMFErkek - M_MF_Erkek) / stdDev_MF_Erkek;
+
+    // T puanı hesaplama
+    const tPuanMF_erkek = (zPuanMF_erkek * 10) + 50;
+
+    return tPuanMF_erkek;
+}
+// MF Kadın testi için Kadın T puanı hesaplama
+function calculateMFTpuanKadin(hamPuanMFKadin) {
+    const M_MF_Kadin = 32.98; // Kadın için ortalama (M)
+    const stdDev_MF_Kadin = 3.67; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanMF_kadin = (hamPuanMFKadin - M_MF_Kadin) / stdDev_MF_Kadin;
+
+    // T puanı hesaplama
+    const tPuanMF_kadin = (zPuanMF_kadin * 10) + 50;
+
+    return tPuanMF_kadin;
+}
+// PA testi için Erkek T puanı hesaplama
+function calculatePATpuanErkek(hamPuanPA) {
+    const M_PA_Erkek = 11.12; // Erkek için ortalama (M)
+    const stdDev_PA_Erkek = 4.03; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanPA_erkek = (hamPuanPA - M_PA_Erkek) / stdDev_PA_Erkek;
+
+    // T puanı hesaplama
+    const tPuanPA_erkek = (zPuanPA_erkek * 10) + 50;
+
+    return tPuanPA_erkek;
+}
+
+// PA testi için Kadın T puanı hesaplama
+function calculatePATpuanKadin(hamPuanPA) {
+    const M_PA_Kadin = 11.93; // Kadın için ortalama (M)
+    const stdDev_PA_Kadin = 4.17; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanPA_kadin = (hamPuanPA - M_PA_Kadin) / stdDev_PA_Kadin;
+
+    // T puanı hesaplama
+    const tPuanPA_kadin = (zPuanPA_kadin * 10) + 50;
+
+    return tPuanPA_kadin;
+}
+            
+            // PT testi için Erkek T puanı hesaplama
+function calculatePTTpuanErkek(ptCorrectedHamPuan) {
+    const M_PT_Erkek = 27.9; // Erkek için ortalama (M)
+    const stdDev_PT_Erkek = 6.3; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanPT_erkek = (ptCorrectedHamPuan - M_PT_Erkek) / stdDev_PT_Erkek;
+
+    // T puanı hesaplama
+    const tPuanPT_erkek = (zPuanPT_erkek * 10) + 50;
+
+    return tPuanPT_erkek;
+}
+
+// PT testi için Kadın T puanı hesaplama
+function calculatePTTpuanKadin(ptCorrectedHamPuan) {
+    const M_PT_Kadin = 29.2; // Kadın için ortalama (M)
+    const stdDev_PT_Kadin = 6.59; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanPT_kadin = (ptCorrectedHamPuan - M_PT_Kadin) / stdDev_PT_Kadin;
+
+    // T puanı hesaplama
+    const tPuanPT_kadin = (zPuanPT_kadin * 10) + 50;
+
+    return tPuanPT_kadin;
+}
+
+// SC testi için Erkek T puanı hesaplama
+function calculateSCTpuanErkek(scCorrectedHamPuan) {
+    const M_SC_Erkek = 29.82; // Erkek için ortalama (M)
+    const stdDev_SC_Erkek = 9.05; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanSC_erkek = (scCorrectedHamPuan - M_SC_Erkek) / stdDev_SC_Erkek;
+
+    // T puanı hesaplama
+    const tPuanSC_erkek = (zPuanSC_erkek * 10) + 50;
+
+    return tPuanSC_erkek;
+}
+
+// SC testi için Kadın T puanı hesaplama
+function calculateSCTpuanKadin(scCorrectedHamPuan) {
+    const M_SC_Kadin = 31.06; // Kadın için ortalama (M)
+    const stdDev_SC_Kadin = 8.2; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanSC_kadin = (scCorrectedHamPuan - M_SC_Kadin) / stdDev_SC_Kadin;
+
+    // T puanı hesaplama
+    const tPuanSC_kadin = (zPuanSC_kadin * 10) + 50;
+
+    return tPuanSC_kadin;
+}
+
+   // MA testi için Erkek T puanı hesaplama
+function calculateMATpuanErkek(maCorrectedHamPuan) {
+    const M_MA_Erkek = 19.96; // Erkek için ortalama (M)
+    const stdDev_MA_Erkek = 4.4; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanMA_erkek = (maCorrectedHamPuan - M_MA_Erkek) / stdDev_MA_Erkek;
+
+    // T puanı hesaplama
+    const tPuanMA_erkek = (zPuanMA_erkek * 10) + 50;
+
+    return tPuanMA_erkek;
+}
+
+// MA testi için Kadın T puanı hesaplama
+function calculateMATpuanKadin(maCorrectedHamPuan) {
+    const M_MA_Kadin = 19.72; // Kadın için ortalama (M)
+    const stdDev_MA_Kadin = 4.36; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanMA_kadin = (maCorrectedHamPuan - M_MA_Kadin) / stdDev_MA_Kadin;
+
+    // T puanı hesaplama
+    const tPuanMA_kadin = (zPuanMA_kadin * 10) + 50;
+
+    return tPuanMA_kadin;
+}
+  
+  // Sİ testi için Erkek T puanı hesaplama
+function calculateSITpuanErkek(hamPuanSI) {
+    const M_SI_Erkek = 25.86; // Erkek için ortalama (M)
+    const stdDev_SI_Erkek = 7.97; // Erkek için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanSI_erkek = (hamPuanSI - M_SI_Erkek) / stdDev_SI_Erkek;
+
+    // T puanı hesaplama
+    const tPuanSI_erkek = (zPuanSI_erkek * 10) + 50;
+
+    return tPuanSI_erkek;
+}
+
+// Sİ testi için Kadın T puanı hesaplama
+function calculateSITpuanKadin(hamPuanSI) {
+    const M_SI_Kadin = 29.88; // Kadın için ortalama (M)
+    const stdDev_SI_Kadin = 7.52; // Kadın için standart sapma
+
+    // Z puanı hesaplama
+    const zPuanSI_kadin = (hamPuanSI - M_SI_Kadin) / stdDev_SI_Kadin;
+
+    // T puanı hesaplama
+    const tPuanSI_kadin = (zPuanSI_kadin * 10) + 50;
+
+    return tPuanSI_kadin;
+}
+                    
+                              
+            const tPuanL_erkek = calculateLTpuanErkek(lHamPuan);
+            const tPuanL_kadin = calculateLTpuanKadin(lHamPuan);
+
+            const tPuanF_erkek = calculateFTpuanErkek(fHamPuan);
+            const tPuanF_kadin = calculateFTpuanKadin(fHamPuan);
+
+            const tPuanK_erkek = calculateKTpuanErkek(kHamPuan);
+            const tPuanK_kadin = calculateKTpuanKadin(kHamPuan);
+
+            // HS Testi T Puanı Hesaplaması
+            const tPuanHS_erkek = calculateHSTpuanErkek(hsCorrectedHamPuan);
+            const tPuanHS_kadin = calculateHSTpuanKadin(hsCorrectedHamPuan);
+
+            // D Testi T Puanı Hesaplaması
+            const tPuanD_erkek = calculateDTpuanErkek(dHamPuan);
+            const tPuanD_kadin = calculateDTpuanKadin(dHamPuan);
+
+            // HY Testi T Puanı Hesaplaması
+            const tPuanHY_erkek = calculateHYTpuanErkek(hyHamPuan);
+            const tPuanHY_kadin = calculateHYTpuanKadin(hyHamPuan);
+
+            // PD Testi T Puanı Hesaplaması
+            const tPuanPD_erkek = calculatePDTpuanErkek(pdCorrectedHamPuan);
+            const tPuanPD_kadin = calculatePDTpuanKadin(pdCorrectedHamPuan);
+
+            // MF Erkek ve MF Kadın Testi T Puanı Hesaplaması
+            const tPuanMF_erkek = calculateMFTpuanErkek(mfErkekHamPuan);
+            const tPuanMF_kadin = calculateMFTpuanKadin(mfKadinHamPuan);
+
+            // PA Testi T Puanı Hesaplaması
+            const tPuanPA_erkek = calculatePATpuanErkek(paHamPuan);
+            const tPuanPA_kadin = calculatePATpuanKadin(paHamPuan);
+
+            // PT Testi T Puanı Hesaplaması
+            const tPuanPT_erkek = calculatePTTpuanErkek(ptCorrectedHamPuan);
+            const tPuanPT_kadin = calculatePTTpuanKadin(ptCorrectedHamPuan);
+
+            // SC Testi T Puanı Hesaplaması
+            const tPuanSC_erkek = calculateSCTpuanErkek(scCorrectedHamPuan);
+            const tPuanSC_kadin = calculateSCTpuanKadin(scCorrectedHamPuan);
+
+            // MA Testi T Puanı Hesaplaması
+            const tPuanMA_erkek = calculateMATpuanErkek(maCorrectedHamPuan);
+            const tPuanMA_kadin = calculateMATpuanKadin(maCorrectedHamPuan);
+
+            // SI Testi T Puanı Hesaplaması
+            const tPuanSI_erkek = calculateSITpuanErkek(siHamPuan);
+            const tPuanSI_kadin = calculateSITpuanKadin(siHamPuan);
+         
+          
+          
+// Erkekler için çizelge
+var ctxErkek = document.getElementById('erkekTpuanChart').getContext('2d');
+
+// Erkek T puanlarını ve etiketleri (ölçek isimleri) güncelleme
+var labelsErkek = ['L', 'F', 'K', 'Hs+5K', 'D', 'Hy', 'Pd+4K', 'Mf', 'Pa', 'Pt+1K', 'Sc+1K', 'Ma+2K', 'Si'];  // Ölçek adları
+var dataErkek = [tPuanL_erkek, tPuanF_erkek, tPuanK_erkek, tPuanHS_erkek, tPuanD_erkek, tPuanHY_erkek, tPuanPD_erkek, tPuanMF_erkek, tPuanPA_erkek, tPuanPT_erkek, tPuanSC_erkek, tPuanMA_erkek, tPuanSI_erkek]; // Erkek T puanları
+
+// Etiketlerin yanına puanları eklerken sayıları yuvarlama
+var updatedLabelsErkek = labelsErkek.map(function(label, index) {
+    return label + ' (' + dataErkek[index].toFixed(2) + ')';  // İki ondalık basamağa yuvarlanmış
+});
+
+var myChartErkek = new Chart(ctxErkek, {
+    type: 'line',
+    data: {
+        labels: updatedLabelsErkek,  // Güncellenmiş etiketler
+        datasets: [
+            {
+                label: 'Erkek T Puanları',
+                data: dataErkek,  // Erkek T puanları
+                borderColor: 'blue',
+                fill: false,
+                tension: 0.2
+            },
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                min: 0,  // En düşük değer
+                max: 120,  // En yüksek değer
+                ticks: {
+                    stepSize: 5,  // Her bir adımda 5 artış yapar
+                    callback: function(value) { return value + " T"; }  // Eksen etiketlerinde "T" ifadesini ekleyin
+                }
+            }
+        },
+   plugins: {
+            annotation: {
+                annotations: {
+                    // Yatay çizgi eklemek için
+                    horizontalLine: {
+                        type: 'line',
+                        yMin: 70,  // Yatay çizgi, T=50'de olacak
+                        yMax: 70,  // Aynı değer
+                        borderColor: 'black',  // Çizginin rengi
+                        borderWidth: 2,  // Çizgi kalınlığı
+                        label: {
+                            enabled: true,
+                            content: 'T = 70',  // Çizgi üzerine etiket ekleyebiliriz
+                            position: 'end'
+                        }
+                    },
+                    // Dikey çizgi eklemek için
+                    verticalLine: {
+                        type: 'line',
+                        xMin: 2,  // 4. veri noktasına dikey çizgi
+                        xMax: 2,  // Aynı değer
+                        borderColor: 'black',  // Çizginin rengi
+                        borderWidth: 2,
+                        label: {
+                            enabled: true,
+                            content: 'LFK Testleri',  // Çizgi üzerine etiket
+                            position: 'end'
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Kadınlar için çizelge
+var ctxKadin = document.getElementById('kadinTpuanChart').getContext('2d');
+
+// Kadın T puanlarını ve etiketleri (ölçek isimleri) güncelleme
+var labelsKadin = ['L', 'F', 'K', 'Hs+5K', 'D', 'Hy', 'Pd+4K', 'Mf', 'Pa', 'Pt+1K', 'Sc+1K', 'Ma+2K', 'Si'];  // Ölçek adları
+var dataKadin = [tPuanL_kadin, tPuanF_kadin, tPuanK_kadin, tPuanHS_kadin, tPuanD_kadin, tPuanHY_kadin, tPuanPD_kadin, tPuanMF_kadin, tPuanPA_kadin, tPuanPT_kadin, tPuanSC_kadin, tPuanMA_kadin, tPuanSI_kadin]; // Kadın T puanları
+
+// Etiketlerin yanına puanları eklerken sayıları yuvarlama
+var updatedLabelsKadin = labelsKadin.map(function(label, index) {
+    return label + ' (' + dataKadin[index].toFixed(2) + ')';  // İki ondalık basamağa yuvarlanmış
+});
+
+var myChartKadin = new Chart(ctxKadin, {
+    type: 'line',
+    data: {
+        labels: updatedLabelsKadin,  // Güncellenmiş etiketler
+        datasets: [
+            {
+                label: 'Kadın T Puanları',
+                data: dataKadin,  // Kadın T puanları
+                borderColor: 'red',
+                fill: false,
+                tension: 0.2
+            },
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                min: 0,  // En düşük değer
+                max: 120,  // En yüksek değer
+                ticks: {
+                    stepSize: 5,  // Her bir adımda 5 artış yapar
+                    callback: function(value) { return value + " T"; }  // Eksen etiketlerinde "T" ifadesini ekleyin
+                }
+            }
+        },
+        plugins: {
+            annotation: {
+                annotations: {
+                    // Yatay çizgi eklemek için
+                    horizontalLine: {
+                        type: 'line',
+                        yMin: 70,  // Yatay çizgi, T=50'de olacak
+                        yMax: 70,  // Aynı değer
+                        borderColor: 'black',  // Çizginin rengi
+                        borderWidth: 2,  // Çizgi kalınlığı
+                        label: {
+                            enabled: true,
+                            content: 'T = 70',  // Çizgi üzerine etiket ekleyebiliriz
+                            position: 'end'
+                        }
+                    },
+                    // Dikey çizgi eklemek için
+                    verticalLine: {
+                        type: 'line',
+                        xMin: 2,  // 4. veri noktasına dikey çizgi
+                        xMax: 2,  // Aynı değer
+                        borderColor: 'black',  // Çizginin rengi
+                        borderWidth: 2,
+                        label: {
+                            enabled: true,
+                            content: 'LFK Testleri',  // Çizgi üzerine etiket
+                            position: 'end'
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+          
+            // Sonuçları tablo halinde göster
+            document.getElementById('result').innerHTML = `
+    <table border="1">
+    <tr>
+        <th>Test</th>
+        <th>Ham Puan</th>
+        <th>Erkek T Puanı</th>
+        <th>Kadın T Puanı</th>
+        <th>K+ Düzeltmesi</th>
+    </tr>
+    <tr><td>L Testi</td><td>${lHamPuan}</td><td>${tPuanL_erkek.toFixed(2)}</td><td>${tPuanL_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>F Testi</td><td>${fHamPuan}</td><td>${tPuanF_erkek.toFixed(2)}</td><td>${tPuanF_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>K Testi</td><td>${kHamPuan}</td><td>${tPuanK_erkek.toFixed(2)}</td><td>${tPuanK_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>HS Testi</td><td>${hsHamPuan}</td><td>${tPuanHS_erkek.toFixed(2)}</td><td>${tPuanHS_kadin.toFixed(2)}</td><td>${hsCorrectedHamPuan}</td></tr>
+    <tr><td>D Testi</td><td>${dHamPuan}</td><td>${tPuanD_erkek.toFixed(2)}</td><td>${tPuanD_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>HY Testi</td><td>${hyHamPuan}</td><td>${tPuanHY_erkek.toFixed(2)}</td><td>${tPuanHY_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>PD Testi</td><td>${pdHamPuan}</td><td>${tPuanPD_erkek.toFixed(2)}</td><td>${tPuanPD_kadin.toFixed(2)}</td><td>${pdCorrectedHamPuan}</td></tr>
+    <tr><td>MF Erkek Testi</td><td>${mfErkekHamPuan}</td><td>${tPuanMF_erkek.toFixed(2)}</td><td>N/A</td><td>N/A</td></tr>
+    <tr><td>MF Kadın Testi</td><td>${mfKadinHamPuan}</td><td>N/A</td><td>${tPuanMF_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>PA Testi</td><td>${paHamPuan}</td><td>${tPuanPA_erkek.toFixed(2)}</td><td>${tPuanPA_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>PT Testi</td><td>${ptHamPuan}</td><td>${tPuanPT_erkek.toFixed(2)}</td><td>${tPuanPT_kadin.toFixed(2)}</td><td>${ptCorrectedHamPuan}</td></tr>
+    <tr><td>SC Testi</td><td>${scHamPuan}</td><td>${tPuanSC_erkek.toFixed(2)}</td><td>${tPuanSC_kadin.toFixed(2)}</td><td>${scCorrectedHamPuan}</td></tr>
+    <tr><td>MA Testi</td><td>${maHamPuan}</td><td>${tPuanMA_erkek.toFixed(2)}</td><td>${tPuanMA_kadin.toFixed(2)}</td><td>${maCorrectedHamPuan}</td></tr>
+    <tr><td>Sİ Testi</td><td>${siHamPuan}</td><td>${tPuanSI_erkek.toFixed(2)}</td><td>${tPuanSI_kadin.toFixed(2)}</td><td>N/A</td></tr>
+    <tr><td>Boş Bırakılan Sorular</td><td>${questionMarkHamPuan}</td></tr>
+</table>
+
+            `;
+        };
+      
+    // Grafikleri ve tabloları güncelleme işlemi
+let myChartErkek;
+let myChartKadin;
+
+function clearPreviousResults() {
+    // Eski grafik ve tabloları temizle
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = "";  // Sonuçları gösteren div içeriği temizlendi
+    
+    // Mevcut grafikleri temizleyelim
+    if (myChartErkek) {
+        myChartErkek.destroy();  // Erkek grafiğini yok et
+    }
+    if (myChartKadin) {
+        myChartKadin.destroy();  // Kadın grafiğini yok et
+    }
+}
+      
+    </script>
+  
+  <button type="button" onclick="exportToExcel()">Sonuçları Excel Olarak İndir</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  
+  
+  
+<script>
+ 
+
+  // Excel dosyasını yükleme fonksiyonu
+function loadExcel() {
+    const input = document.getElementById('uploadExcel');
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+            populateFormWithData(jsonData);
+        };
+
+        reader.readAsArrayBuffer(file);
+    } else {
+        alert("Lütfen bir Excel dosyası yükleyin.");
+    }
+}
+
+// Excel'den gelen veriyi forma yerleştirme fonksiyonu
+function populateFormWithData(data) {
+    // Data'nın Excel formatı: [{ Question: 1, Answer: 1 }, { Question: 2, Answer: 2 }, ...]
+    data.forEach((row) => {
+        const questionNumber = row.Question; // Excel'deki "Question" sütununa göre
+        const answer = row.Answer; // Excel'deki "Answer" sütununa göre
+
+        // Soruların numarası ve cevaplar varsa, formda ilgili radio butonunu işaretle
+        if (answer !== undefined && questionNumber && questionNumber <= totalQuestions) {
+            const questionField = document.querySelector(`input[name="question_${questionNumber}"][value="${answer}"]`);
+            if (questionField) {
+                questionField.checked = true;
+            }
+        }
+    });
+}
+
+// Sayfa yüklendiğinde soruları oluştur
+window.onload = function() {
+    const container = document.getElementById('questionsContainer');
+    questions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question');
+
+        const label = document.createElement('label');
+        label.textContent = question;
+        questionDiv.appendChild(label);
+
+        for (let i = 0; i <= 2; i++) {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `question_${index + 1}`;  // name özelliği dinamik olarak atanıyor
+            input.value = i;
+            input.id = `question_${index + 1}_${i}`;
+
+            const inputLabel = document.createElement('label');
+            inputLabel.setAttribute('for', `question_${index + 1}_${i}`);
+            inputLabel.textContent = i;
+
+            questionDiv.appendChild(input);
+            questionDiv.appendChild(inputLabel);
+        }
+
+        container.appendChild(questionDiv);
+    });
+};
+
+   function exportToExcel() {
+        const formData = new FormData(document.getElementById('testForm'));
+        const entries = Array.from(formData.entries());
+
+        // Excel tablosu oluşturma
+        let excelData = [["Soru Numarası", "Cevap"]]; // Başlık satırı
+        entries.forEach(([name, value]) => {
+            const questionNumber = name.split('_')[1]; // Soru numarasını alıyoruz
+            excelData.push([`Soru ${questionNumber}`, value]); // Soruyu ve cevabı tabloya ekliyoruz
+        });
+
+        // SheetJS kullanarak Excel dosyası oluşturma
+        const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sonuçlar");
+
+        // Excel dosyasını kullanıcıya indirme
+        XLSX.writeFile(workbook, "MMPI_Sonuçlar.xlsx");
+    }
+
+</script>
+  
+  
+</body>
+</html>
+
+ 

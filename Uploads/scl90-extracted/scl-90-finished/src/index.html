@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCL-90-R Testi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>SCL-90-R Testi</h1>
+    <form id="sclForm">
+        <h3>1-10 Arası Sorular</h3>
+        <div class="question">
+            <label>1. Baş ağrısı</label>
+            <input type="number" name="q1" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>2. Sinirlilik ya da içinin titremesi</label>
+            <input type="number" name="q2" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>3. Tekrarlayan düşünceler</label>
+            <input type="number" name="q3" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>4. Mide bulantısı ya da rahatsızlığı</label>
+            <input type="number" name="q4" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>5. Uykuya dalmakta güçlük</label>
+            <input type="number" name="q5" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>6. Günlük aktivitelerde azalma</label>
+            <input type="number" name="q6" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>7. Kalabalık yerlerde kendini kötü hissetme</label>
+            <input type="number" name="q7" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>8. Yalnız kalmaktan korkma</label>
+            <input type="number" name="q8" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>9. Kendini değersiz hissetme</label>
+            <input type="number" name="q9" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>10. Sık sık unutkanlık yaşama</label>
+            <input type="number" name="q10" min="0" max="4" required>
+        </div>
+
+        <h3>11-20 Arası Sorular</h3>
+        <div class="question">
+            <label>11. Aşırı sinirli hissetme</label>
+            <input type="number" name="q11" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>12. El ya da ayaklarda uyuşma</label>
+            <input type="number" name="q12" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>13. Yükseklik korkusu</label>
+            <input type="number" name="q13" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>14. Sürekli endişe hali</label>
+            <input type="number" name="q14" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>15. Geceleri uykudan korkuyla uyanma</label>
+            <input type="number" name="q15" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>16. Aşırı düşünceli olma</label>
+            <input type="number" name="q16" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>17. Kalp çarpıntısı</label>
+            <input type="number" name="q17" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>18. Paranoya</label>
+            <input type="number" name="q18" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>19. Depresif hissetme</label>
+            <input type="number" name="q19" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>20. Sosyal ortamlarda kendini kötü hissetme</label>
+            <input type="number" name="q20" min="0" max="4" required>
+        </div>
+
+        <h3>21-30 Arası Sorular</h3>
+        <div class="question">
+            <label>21. Kendini suçlu hissetme</label>
+            <input type="number" name="q21" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>22. İsteksizlik</label>
+            <input type="number" name="q22" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>23. Ölüm korkusu</label>
+            <input type="number" name="q23" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>24. Ani öfke patlamaları</label>
+            <input type="number" name="q24" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>25. Kapalı yerlerde kalma korkusu</label>
+            <input type="number" name="q25" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>26. Hayattan zevk alamama</label>
+            <input type="number" name="q26" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>27. Kaslarda gerginlik</label>
+            <input type="number" name="q27" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>28. Zihinsel takıntılar</label>
+            <input type="number" name="q28" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>29. Karar vermekte zorlanma</label>
+            <input type="number" name="q29" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>30. Konsantrasyon güçlüğü</label>
+            <input type="number" name="q30" min="0" max="4" required>
+        </div>
+
+        <!-- Aynı şekilde 31-90 arası soruları da ekleyeceğiz -->
+                <h3>31-40 Arası Sorular</h3>
+        <div class="question">
+            <label>31. Kendini işe yaramaz hissetme</label>
+            <input type="number" name="q31" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>32. Çabuk yorulma</label>
+            <input type="number" name="q32" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>33. Nefes darlığı</label>
+            <input type="number" name="q33" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>34. İnsanlarla iletişimde güçlük çekme</label>
+            <input type="number" name="q34" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>35. Kendini çaresiz hissetme</label>
+            <input type="number" name="q35" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>36. Sosyal ortamlardan kaçınma</label>
+            <input type="number" name="q36" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>37. Aşırı hassasiyet</label>
+            <input type="number" name="q37" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>38. Tekrarlayan ve istenmeyen düşünceler</label>
+            <input type="number" name="q38" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>39. Her şeyin kötü gideceğini düşünme</label>
+            <input type="number" name="q39" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>40. Mide bulantısı ya da rahatsızlığı</label>
+            <input type="number" name="q40" min="0" max="4" required>
+        </div>
+
+        <h3>41-50 Arası Sorular</h3>
+        <div class="question">
+            <label>41. Sosyal ortamlarda kendini değersiz hissetme</label>
+            <input type="number" name="q41" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>42. Ellerde ya da ayaklarda terleme</label>
+            <input type="number" name="q42" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>43. Paranoyak düşünceler</label>
+            <input type="number" name="q43" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>44. Kendini sürekli suçlu hissetme</label>
+            <input type="number" name="q44" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>45. Zihinsel takıntılar</label>
+            <input type="number" name="q45" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>46. Tekrarlayan hareketler</label>
+            <input type="number" name="q46" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>47. Korku hissi</label>
+            <input type="number" name="q47" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>48. Nefes darlığı</label>
+            <input type="number" name="q48" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>49. Çarpıntı</label>
+            <input type="number" name="q49" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>50. Kapalı yerlerde kalma korkusu</label>
+            <input type="number" name="q50" min="0" max="4" required>
+        </div>
+
+        <h3>51-60 Arası Sorular</h3>
+        <div class="question">
+            <label>51. Takıntılı düşünceler</label>
+            <input type="number" name="q51" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>52. Baş dönmesi</label>
+            <input type="number" name="q52" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>53. Baş ağrısı</label>
+            <input type="number" name="q53" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>54. Kendi kendine konuşma</label>
+            <input type="number" name="q54" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>55. Gelecekle ilgili sürekli kaygı duyma</label>
+            <input type="number" name="q55" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>56. Kaslarda gerginlik</label>
+            <input type="number" name="q56" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>57. Her şeyden çabuk sıkılma</label>
+            <input type="number" name="q57" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>58. El ya da ayaklarda uyuşma</label>
+            <input type="number" name="q58" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>59. Kendine zarar verme düşünceleri</label>
+            <input type="number" name="q59" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>60. Uyuyamama</label>
+            <input type="number" name="q60" min="0" max="4" required>
+        </div>
+
+        <h3>61-70 Arası Sorular</h3>
+        <div class="question">
+            <label>61. İnsanlara karşı aşırı duyarlılık</label>
+            <input type="number" name="q61" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>62. Kendi düşüncelerinden korkma</label>
+            <input type="number" name="q62" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>63. Öfke patlamaları</label>
+            <input type="number" name="q63" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>64. Geçmişteki hatalar için pişmanlık duyma</label>
+            <input type="number" name="q64" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>65. Tekrarlayan zorlayıcı düşünceler</label>
+            <input type="number" name="q65" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>66. Kendi bedeninden rahatsızlık duyma</label>
+            <input type="number" name="q66" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>67. Kontrol edilemeyen öfke</label>
+            <input type="number" name="q67" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>68. Paranoyak düşünceler</label>
+            <input type="number" name="q68" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>69. Sosyal ortamlardan kaçınma</label>
+            <input type="number" name="q69" min="0" max="4" required
+                           <div class="question">
+            <label>70. Kapalı yerlerde kalma korkusu</label>
+            <input type="number" name="q70" min="0" max="4" required>
+        </div>
+
+        <h3>71-80 Arası Sorular</h3>
+        <div class="question">
+            <label>71. Kendini depresif hissetme</label>
+            <input type="number" name="q71" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>72. Her şeyin anlamını yitirmiş hissetme</label>
+            <input type="number" name="q72" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>73. İnsanlarla aranda mesafe hissetme</label>
+            <input type="number" name="q73" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>74. Kontrol edilemeyen öfke</label>
+            <input type="number" name="q74" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>75. Belirli yerlerde anksiyete hissetme</label>
+            <input type="number" name="q75" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>76. Paranoyak düşünceler</label>
+            <input type="number" name="q76" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>77. Kendini tuhaf hissetme</label>
+            <input type="number" name="q77" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>78. Gelecekle ilgili kaygı duyma</label>
+            <input type="number" name="q78" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>79. Her şeyin boş olduğunu hissetme</label>
+            <input type="number" name="q79" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>80. Kendini güvensiz hissetme</label>
+            <input type="number" name="q80" min="0" max="4" required>
+        </div>
+
+        <h3>81-90 Arası Sorular</h3>
+        <div class="question">
+            <label>81. Aniden öfke patlamaları yaşama</label>
+            <input type="number" name="q81" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>82. Belirli yerlerde kendini huzursuz hissetme</label>
+            <input type="number" name="q82" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>83. İnsanlara güvenmeme</label>
+            <input type="number" name="q83" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>84. Kendi düşüncelerinden korkma</label>
+            <input type="number" name="q84" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>85. Gerçek dışı şeyler hissetme</label>
+            <input type="number" name="q85" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>86. Sürekli endişe hali</label>
+            <input type="number" name="q86" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>87. Kendini yabancı hissetme</label>
+            <input type="number" name="q87" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>88. Sosyal ortamlarda gerginlik hissetme</label>
+            <input type="number" name="q88" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>89. Geçmişteki hatalar için pişmanlık duyma</label>
+            <input type="number" name="q89" min="0" max="4" required>
+        </div>
+        <div class="question">
+            <label>90. Sosyal ortamlarda panik atak hissetme</label>
+            <input type="number" name="q90" min="0" max="4" required>
+        </div>
+
+        <button type="submit">Sonucu Hesapla</button>
+    </form>
+<div id="sonuc" class="result"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<canvas id="myChart" width="400" height="200"></canvas>
+<div id="legend" style="margin-top: 20px;"></div>
+
+</body>
+</html>
+
